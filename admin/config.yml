@@ -1,0 +1,50 @@
+backend:
+  name: github
+  repo: pdkisel/pdkisel-website
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+site_url: https://pdkisel.netlify.app
+display_url: https://pdkisel.id
+
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+locale: 'id'
+
+collections:
+  - name: "hero"
+    label: "Tampilan Hero (Atas)"
+    files:
+      - name: "hero"
+        label: "Bagian Hero"
+        file: "content/hero.json"
+        fields:
+          - {label: "Tagline (Teks Emas)", name: "tagline", widget: "string"}
+          - {label: "Judul Utama (H1)", name: "title", widget: "string"}
+          - {label: "Deskripsi Singkat", name: "subtitle", widget: "text"}
+
+  - name: "about"
+    label: "Tentang Kami"
+    files:
+      - name: "about"
+        label: "Konten Tentang Kami"
+        file: "content/about.json"
+        fields:
+          - {label: "Judul Section", name: "title", widget: "string", default: "Siapa PDKISEL?"}
+          - {label: "Paragraf 1", name: "paragraph1", widget: "text"}
+          - {label: "Paragraf 2", name: "paragraph2", widget: "text"}
+          - {label: "Gambar Tentang Kami", name: "image", widget: "image", required: false}
+
+  - name: "contact"
+    label: "Kontak & Sosial Media"
+    files:
+      - name: "contact"
+        label: "Informasi Kontak"
+        file: "content/contact.json"
+        fields:
+          - {label: "Email", name: "email", widget: "string"}
+          - {label: "Nomor WhatsApp", name: "whatsapp", widget: "string"}
+          - {label: "Link Instagram", name: "instagram", widget: "string"}
+          - {label: "Link YouTube", name: "youtube", widget: "string"}
