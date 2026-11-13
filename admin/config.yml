@@ -32,10 +32,36 @@ collections:
         label: "Konten Tentang Kami"
         file: "content/about.json"
         fields:
-          - {label: "Judul Section", name: "title", widget: "string", default: "Siapa PDKISEL?"}
+          - {label: "Judul Section", name: "title", widget: "string"}
           - {label: "Paragraf 1", name: "paragraph1", widget: "text"}
           - {label: "Paragraf 2", name: "paragraph2", widget: "text"}
           - {label: "Gambar Tentang Kami", name: "image", widget: "image", required: false}
+
+  - name: "visi_misi"
+    label: "Visi & Misi"
+    files:
+      - name: "visi_misi"
+        label: "Konten Visi & Misi"
+        file: "content/visi_misi.json"
+        fields:
+          - {label: "Visi", name: "visi", widget: "text"}
+          - {label: "Misi", name: "misi", widget: "text"}
+          - {label: "Nilai", name: "nilai", widget: "text"}
+
+  - name: "program"
+    label: "Program Kegiatan"
+    files:
+      - name: "program"
+        label: "Daftar Program"
+        file: "content/program.json"
+        fields:
+          - {label: "Judul Section", name: "title", widget: "string"}
+          - {label: "Program 1", name: "prog1", widget: "object", fields: [{label: "Judul", name: "title", widget: "string"}, {label: "Deskripsi", name: "desc", widget: "text"}]}
+          - {label: "Program 2", name: "prog2", widget: "object", fields: [{label: "Judul", name: "title", widget: "string"}, {label: "Deskripsi", name: "desc", widget: "text"}]}
+          - {label: "Program 3", name: "prog3", widget: "object", fields: [{label: "Judul", name: "title", widget: "string"}, {label: "Deskripsi", name: "desc", widget: "text"}]}
+          - {label: "Program 4", name: "prog4", widget: "object", fields: [{label: "Judul", name: "title", widget: "string"}, {label: "Deskripsi", name: "desc", widget: "text"}]}
+          - {label: "Program 5", name: "prog5", widget: "object", fields: [{label: "Judul", name: "title", widget: "string"}, {label: "Deskripsi", name: "desc", widget: "text"}]}
+          - {label: "Program 6", name: "prog6", widget: "object", fields: [{label: "Judul", name: "title", widget: "string"}, {label: "Deskripsi", name: "desc", widget: "text"}]}
 
   - name: "contact"
     label: "Kontak & Sosial Media"
