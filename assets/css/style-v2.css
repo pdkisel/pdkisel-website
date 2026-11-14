@@ -293,7 +293,7 @@ h2 {
 }
 
 /* =========================================
-   VISI & MISI (ELEGAN)
+   VISI & MISI (ELEGAN & RAPI)
 ========================================= */
 .cards-grid {
     display: grid;
@@ -305,7 +305,7 @@ h2 {
 
 .card {
     background: linear-gradient(145deg, #ffffff, #f9fafc);
-    padding: 50px 30px;
+    padding: 40px 30px;
     border-radius: 16px;
     border: 1px solid rgba(0,0,0,0.03);
     box-shadow: 0 15px 35px rgba(10, 31, 68, 0.05);
@@ -320,7 +320,7 @@ h2 {
 #visi-misi .card:nth-child(2) {
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 50px 35px;
+    padding: 40px 25px;
 }
 
 #visi-misi .card:nth-child(2) .card-icon,
@@ -353,12 +353,16 @@ h2 {
     text-align: center;
 }
 
+/* KHUSUS UNTUK TEKS MISI AGAR RATA KIRI & BARIS KE-2 SEJAJAR */
 #misi-text {
     text-align: left !important;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.9;
-    margin-top: 15px;
     width: 100%;
+    
+    /* Trik agar baris kedua menjorok ke dalam sejajar dengan teks di atasnya */
+    padding-left: 1.6em; 
+    text-indent: -1.6em;
 }
 
 /* =========================================
