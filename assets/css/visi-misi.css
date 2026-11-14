@@ -1,0 +1,39 @@
+/* =========================================
+   LAYOUT 2 KOLOM: VISI/NILAI (KIRI) & MISI (KANAN)
+========================================= */
+#visi-misi .cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1.5fr !important;
+    grid-template-rows: auto auto !important;
+    gap: 30px !important;
+    align-items: start !important;
+    max-width: 1000px !important;
+    margin: 50px auto 0 auto !important;
+}
+
+#visi-misi .cards-grid > .card:nth-child(2) {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 3 !important;
+    height: 100% !important;
+}
+
+#visi-misi .cards-grid > .card:nth-child(1) {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 2 !important;
+}
+
+#visi-misi .cards-grid > .card:nth-child(3) {
+    grid-column: 1 / 2 !important;
+    grid-row: 2 / 3 !important;
+}
+
+@media (max-width: 768px) {
+    #visi-misi .cards-grid {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+    }
+    #visi-misi .cards-grid > .card {
+        grid-column: 1 / 2 !important;
+        grid-row: auto !important;
+    }
+}
