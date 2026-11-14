@@ -293,7 +293,7 @@ h2 {
 }
 
 /* =========================================
-   VISI & MISI (DESAIN BARU)
+   VISI & MISI (DESAIN BARU ELEGAN)
 ========================================= */
 .cards-grid {
     display: grid;
@@ -323,14 +323,14 @@ h2 {
 .card-icon {
     font-size: 1.8rem;
     color: #D32F2F; 
-    text-align: left;
+    text-align: left !important;
     margin-bottom: 5px;
 }
 
 .card h3 {
     font-size: 1.4rem;
     color: var(--navy-deep);
-    text-align: left;
+    text-align: left !important;
     margin-bottom: 10px;
     font-family: var(--font-heading);
 }
@@ -339,26 +339,18 @@ h2 {
     color: var(--teks-abu);
     font-size: 0.95rem;
     line-height: 1.7;
-    text-align: left;
+    text-align: left !important;
 }
 
-/* Pengaturan Khusus Misi dengan HTML List */
+/* PAKSA TEKS MISI AGAR RATA KIRI & BARIS KE-2 SEJAJAR */
 #misi-text {
     text-align: left !important;
-    font-size: 0.9rem;
-    line-height: 1.8;
+    font-size: 0.9rem !important;
+    line-height: 1.8 !important;
     width: 100%;
-}
-
-#misi-text ul {
-    list-style-type: lower-alpha !important;
-    padding-left: 20px !important;
-    margin: 0 !important;
-}
-
-#misi-text li {
-    margin-bottom: 12px !important;
-    padding-left: 5px;
+    padding-left: 1.5em !important; 
+    text-indent: -1.5em !important;
+    display: block !important;
 }
 
 /* =========================================
