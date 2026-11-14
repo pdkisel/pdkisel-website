@@ -297,10 +297,10 @@ h2 {
 ========================================= */
 #visi-misi .cards-grid {
     display: grid;
-    grid-template-columns: 1fr 1.5fr; /* Kiri lebih kecil, Kanan lebih besar */
+    grid-template-columns: 1fr 1.5fr; /* Kiri kecil, Kanan besar */
     grid-template-rows: auto auto;
     gap: 30px;
-    align-items: start !important;
+    align-items: stretch;
     max-width: 1000px;
     margin: 50px auto 0 auto;
 }
@@ -310,12 +310,11 @@ h2 {
     border: 1px solid #E2E8F0;
     border-radius: 12px;
     padding: 40px 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start !important;
-    height: auto !important;
+    gap: 15px;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
 }
 
 #visi-misi .card:hover {
@@ -324,33 +323,30 @@ h2 {
     border-color: #D32F2F;
 }
 
-/* Posisi Misi (Kanan, Baris 1-2) */
-#visi-misi .cards-grid > .card:nth-child(2) {
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
-    height: 100% !important;
-}
-
-/* Posisi Visi (Kiri, Baris 1) */
-#visi-misi .cards-grid > .card:nth-child(1) {
+/* Mengatur Posisi Grid */
+#visi-misi .cards-grid > .card:nth-child(1) { /* Visi */
     grid-column: 1 / 2;
     grid-row: 1 / 2;
 }
-
-/* Posisi Nilai (Kiri, Baris 2) */
-#visi-misi .cards-grid > .card:nth-child(3) {
+#visi-misi .cards-grid > .card:nth-child(2) { /* Misi */
+    grid-column: 2 / 3;
+    grid-row: 1 / 3; /* Memanjang ke bawah */
+    height: 100%;
+}
+#visi-misi .cards-grid > .card:nth-child(3) { /* Nilai */
     grid-column: 1 / 2;
     grid-row: 2 / 3;
 }
 
-.card-icon {
+/* Desain Teks di dalam Card */
+#visi-misi .card-icon {
     font-size: 1.8rem;
     color: #D32F2F; 
     text-align: left !important;
     margin-bottom: 5px;
 }
 
-.card h3 {
+#visi-misi .card h3 {
     font-size: 1.4rem;
     color: var(--navy-deep);
     text-align: left !important;
@@ -358,14 +354,14 @@ h2 {
     font-family: var(--font-heading);
 }
 
-.card p {
+#visi-misi .card p {
     color: var(--teks-abu);
     font-size: 0.95rem;
     line-height: 1.7;
     text-align: left !important;
 }
 
-/* Pengaturan Teks Misi (Tabel) */
+/* Teks Misi (Tabel di CMS) */
 #misi-text {
     text-align: left !important;
     font-size: 0.9rem;
@@ -652,11 +648,6 @@ h2 {
     
     .footer-brand p { margin: 0 auto; }
     .social-icons { justify-content: center; }
-
-    .cards-grid,
-    .program-grid {
-        grid-template-columns: 1fr;
-    }
 
     /* Reset layout 2 kolom menjadi 1 kolom di HP */
     #visi-misi .cards-grid {
