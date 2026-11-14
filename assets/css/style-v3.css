@@ -23,8 +23,10 @@
     box-sizing: border-box;
 }
 
-html {
+html, body {
     scroll-behavior: smooth;
+    max-width: 100% !important;
+    overflow-x: hidden !important; /* Mencegah layar bergeser ke samping */
 }
 
 body {
@@ -293,32 +295,16 @@ h2 {
 }
 
 /* =========================================
-   VISI & MISI (DESAIN 2 KOLOM ELEGAN)
+   VISI & MISI (LAYOUT 2 KOLOM)
 ========================================= */
 #visi-misi .cards-grid {
     display: grid !important;
-    grid-template-columns: 1fr 1.5fr !important;
+    grid-template-columns: 1fr 1.5fr !important; 
     grid-template-rows: auto auto !important;
     gap: 30px !important;
-    align-items: start !important;
+    align-items: stretch !important;
     max-width: 1000px !important;
     margin: 50px auto 0 auto !important;
-}
-
-#visi-misi .cards-grid > .card:nth-child(2) {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 / 3 !important;
-    height: 100% !important;
-}
-
-#visi-misi .cards-grid > .card:nth-child(1) {
-    grid-column: 1 / 2 !important;
-    grid-row: 1 / 2 !important;
-}
-
-#visi-misi .cards-grid > .card:nth-child(3) {
-    grid-column: 1 / 2 !important;
-    grid-row: 2 / 3 !important;
 }
 
 #visi-misi .card {
@@ -331,6 +317,22 @@ h2 {
     gap: 15px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    justify-content: flex-start !important;
+    height: auto !important;
+}
+
+#visi-misi .cards-grid > .card:nth-child(1) { /* Visi */
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 2 !important;
+}
+#visi-misi .cards-grid > .card:nth-child(2) { /* Misi */
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 3 !important; /* Memanjang ke bawah */
+    height: 100% !important;
+}
+#visi-misi .cards-grid > .card:nth-child(3) { /* Nilai */
+    grid-column: 1 / 2 !important;
+    grid-row: 2 / 3 !important;
 }
 
 #visi-misi .card:hover {
@@ -361,6 +363,7 @@ h2 {
     text-align: left !important;
 }
 
+/* Pengaturan Teks Misi (Tabel di CMS) */
 #misi-text {
     text-align: left !important;
     font-size: 0.9rem;
@@ -658,6 +661,24 @@ h2 {
     #visi-misi .cards-grid > .card:nth-child(3) {
         grid-column: 1 / 2 !important;
         grid-row: auto !important;
+    }
+
+    /* Perbaikan Kunci Layar HP */
+    .container, .section, .hero, .footer {
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
+    .card, .program-card-custom {
+        width: 100% !important;
+        margin: 0 auto !important;
+    }
+
+    /* Memperbaiki tabel misi agar tidak merusak layout di HP */
+    #misi-text table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
     }
 }
 
