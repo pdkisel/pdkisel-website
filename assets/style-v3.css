@@ -293,13 +293,14 @@ h2 {
 }
 
 /* =========================================
-   VISI & MISI (DESAIN BARU ELEGAN)
+   VISI & MISI (DESAIN BARU)
 ========================================= */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     margin-top: 50px;
+    align-items: start !important; /* Mencegah kotak memanjang ke bawah */
 }
 
 .card {
@@ -312,6 +313,8 @@ h2 {
     gap: 15px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    justify-content: flex-start !important;
+    height: auto !important;
 }
 
 .card:hover {
@@ -342,15 +345,22 @@ h2 {
     text-align: left !important;
 }
 
-/* PAKSA TEKS MISI AGAR RATA KIRI & BARIS KE-2 SEJAJAR */
+/* Pengaturan Teks Misi (Tabel) */
 #misi-text {
     text-align: left !important;
-    font-size: 0.9rem !important;
-    line-height: 1.8 !important;
+    font-size: 0.9rem;
+    line-height: 1.8;
     width: 100%;
-    padding-left: 1.5em !important; 
-    text-indent: -1.5em !important;
-    display: block !important;
+}
+
+#misi-text table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#misi-text td {
+    vertical-align: top;
+    padding-bottom: 12px;
 }
 
 /* =========================================
