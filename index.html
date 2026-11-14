@@ -14,8 +14,11 @@
     <!-- Font Awesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Link ke CSS BARU (style-v3.css) -->
+    <!-- Link ke CSS UTAMA -->
     <link rel="stylesheet" href="assets/css/style-v3.css">
+    
+    <!-- Link ke CSS KHUSUS VISI & MISI -->
+    <link rel="stylesheet" href="assets/css/visi-misi.css">
 </head>
 <body>
 
@@ -98,7 +101,7 @@
         </div>
     </section>
 
-    <!-- SECTION 4: PROGRAM (DESAIN BARU) -->
+    <!-- SECTION 4: PROGRAM -->
     <section class="section section-dark" id="program" style="background-color: #0A1F44;">
         <div class="container">
             <div class="text-center">
@@ -106,7 +109,6 @@
                 <h2 class="text-white" id="program-title">Wadah Pertumbuhan Iman</h2>
             </div>
             <div class="program-grid">
-                <!-- Program 1 -->
                 <div class="program-card-custom">
                     <div class="program-icon-custom"><i class="fas fa-dove"></i></div>
                     <div class="program-content">
@@ -114,7 +116,6 @@
                         <p id="prog1-desc">Persekutuan doa yang intim—hadir secara online maupun tatap muka—sebagai tempat menuangkan pergumulan dan merayakan kebaikan Tuhan bersama.</p>
                     </div>
                 </div>
-                <!-- Program 2 -->
                 <div class="program-card-custom">
                     <div class="program-icon-custom"><i class="fas fa-book-bible"></i></div>
                     <div class="program-content">
@@ -122,7 +123,6 @@
                         <p id="prog2-desc">Kajian dan diskusi firman yang mendalam, dirancang untuk menjawab tantangan iman di tengah kompleksitas dunia kerja modern.</p>
                     </div>
                 </div>
-                <!-- Program 3 -->
                 <div class="program-card-custom">
                     <div class="program-icon-custom"><i class="fas fa-users"></i></div>
                     <div class="program-content">
@@ -130,7 +130,6 @@
                         <p id="prog3-desc">Momen berharga untuk melangkah sejenak dari rutinitas, menyegarkan jiwa, dan mempererat persaudaraan di dalam suasana yang penuh kehangatan.</p>
                     </div>
                 </div>
-                <!-- Program 4 -->
                 <div class="program-card-custom">
                     <div class="program-icon-custom"><i class="fas fa-praying-hands"></i></div>
                     <div class="program-content">
@@ -138,7 +137,6 @@
                         <p id="prog4-desc">Beban Anda adalah beban kami. Layanan doa yang mendukung setiap pergumulan dan kebutuhan anggota dengan penuh ketulusan.</p>
                     </div>
                 </div>
-                <!-- Program 5 -->
                 <div class="program-card-custom">
                     <div class="program-icon-custom"><i class="fas fa-music"></i></div>
                     <div class="program-content">
@@ -146,7 +144,6 @@
                         <p id="prog5-desc">Mengangkat pujian sebagai wujud syukur, membawa suasana ibadah yang sakral dan menyentuh hati di setiap persekutuan.</p>
                     </div>
                 </div>
-                <!-- Program 6 -->
                 <div class="program-card-custom">
                     <div class="program-icon-custom"><i class="fas fa-briefcase"></i></div>
                     <div class="program-content">
@@ -244,7 +241,6 @@
 
     <!-- SCRIPT UNTUK MEMBACA DATA DARI CMS -->
     <script>
-      // 1. Fetch Hero
       fetch('./content/hero.json') 
         .then(response => response.json())
         .then(data => {
@@ -254,7 +250,6 @@
         })
         .catch(error => console.log('Data Hero belum siap:', error));
 
-      // 2. Fetch About
       fetch('./content/about.json')
         .then(response => response.json())
         .then(data => {
@@ -265,27 +260,22 @@
         })
         .catch(error => console.log('Data About belum siap:', error));
 
-      // 3. Fetch Visi & Misi
       fetch('./content/visi_misi.json')
         .then(response => response.json())
         .then(data => {
           if(data.visi) document.getElementById('visi-text').innerText = data.visi;
-          
           if(data.misi) {
               let misiTeks = data.misi.replace(/\n/g, '<br>');
               document.getElementById('misi-text').innerHTML = misiTeks;
           }
-          
           if(data.nilai) document.getElementById('nilai-text').innerText = data.nilai;
         })
         .catch(error => console.log('Data Visi Misi belum siap:', error));
 
-      // 4. Fetch Program Kegiatan
       fetch('./content/program.json')
         .then(response => response.json())
         .then(data => {
           if(data.title) document.getElementById('program-title').innerText = data.title;
-          
           for(let i = 1; i <= 6; i++) {
             if(data['prog' + i]) {
               document.getElementById('prog' + i + '-title').innerText = data['prog' + i].title;
