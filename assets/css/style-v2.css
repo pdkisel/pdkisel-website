@@ -1,5 +1,5 @@
 /* =========================================
-   DESAIN BARU VISI & MISI (MIRIP PROGRAM)
+   DESAIN BARU VISI & MISI (SAMA SEPERTI PROGRAM)
 ========================================= */
 .cards-grid {
     display: grid;
@@ -10,7 +10,7 @@
 
 .card {
     background: #FFFFFF;
-    border: 1px solid #E2E8F0; /* Border tipis abu-abu */
+    border: 1px solid #E2E8F0;
     border-radius: 12px;
     padding: 35px 30px;
     display: flex;
@@ -18,18 +18,18 @@
     gap: 15px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-    border-top: none; /* Hilangkan garis merah di atas */
+    border-top: none;
 }
 
 .card:hover {
     box-shadow: 0 10px 25px rgba(10, 31, 68, 0.08);
     transform: translateY(-5px);
-    border-color: #D32F2F; /* Border jadi merah saat di-hover */
+    border-color: #D32F2F;
 }
 
 .card-icon {
     font-size: 1.8rem;
-    color: #D32F2F; /* Ikon berwarna merah kisel */
+    color: #D32F2F; 
     text-align: left;
     margin-bottom: 5px;
 }
