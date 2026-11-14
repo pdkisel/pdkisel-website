@@ -366,44 +366,49 @@ h2 {
 }
 
 /* =========================================
-   PROGRAM SECTION
+   DESAIN BARU PROGRAM KEGIATAN
 ========================================= */
 .program-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
     margin-top: 50px;
 }
 
-.program-card {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 30px;
-    border-radius: 12px;
+.program-card-custom {
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 35px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     transition: all 0.3s ease;
 }
 
-.program-card:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--merah-kisel);
+.program-card-custom:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(230, 57, 70, 0.5);
     transform: translateY(-5px);
 }
 
-.program-icon {
+.program-icon-custom {
     font-size: 2rem;
-    color: var(--emas);
-    margin-bottom: 20px;
+    color: #D4AF37;
+    text-align: left;
 }
 
-.program-card h3 {
-    font-size: 1.3rem;
+.program-content h3 {
+    color: #FFFFFF;
+    font-size: 1.4rem;
     margin-bottom: 10px;
-    color: var(--putih);
+    font-family: var(--font-heading);
 }
 
-.program-card p {
+.program-content p {
     color: #a0aec0;
     font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 /* =========================================
