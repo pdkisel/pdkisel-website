@@ -14,7 +14,8 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 
 // Fungsi khusus untuk mengirim ucapan ulang tahun
-function kirimUcapanUltah($email_tujuan, $nama) {
+// Tambahan parameter $foto untuk menerima nama file foto
+function kirimUcapanUltah($email_tujuan, $nama, $foto) {
     $mail = new PHPMailer(true);
 
     try {
@@ -27,16 +28,20 @@ function kirimUcapanUltah($email_tujuan, $nama) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
-        // Pengaturan Pengirim & Penerima
         $mail->setFrom('no-reply@pdkisel.id', 'PDKISEL');
         $mail->addAddress($email_tujuan, $nama);
 
-        // PENTING: Mengatur Charset agar Emoji terbaca
         $mail->CharSet = 'UTF-8'; 
-        
         $mail->isHTML(true);
         $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
+        // Menentukan URL Foto (Jika tidak ada foto, gunakan ikon default)
+        if (!empty($foto)) {
+            $url_foto = 'https://pdkisel.id/uploads/' . $foto;
+        } else {
+            $url_foto = 'https://pdkisel.id/assets/images/logo-pdkisel.png'; // Fallback ke logo
+        }
+
         $mail->Body = '
         <!DOCTYPE html>
         <html>
@@ -49,10 +54,12 @@ function kirimUcapanUltah($email_tujuan, $nama) {
                     <td align="center">
                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10, 31, 68, 0.1);">
                             
-                            <!-- Header Ulang Tahun (Warna Merah Meriah) -->
+                            <!-- Header Ulang Tahun (Warna Merah Meriah dengan Foto) -->
                             <tr>
-                                <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 50px 20px;">
-                                    <img src="https://pdkisel.id/assets/images/logo-pdkisel.png" alt="Logo PDKISEL" style="height: 80px; margin-bottom: 20px;">
+                                <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 40px 20px;">
+                                    <!-- FOTO PROFIL BULAT -->
+                                    <img src="' . $url_foto . '" alt="Foto ' . htmlspecialchars($nama) . '" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
+                                    
                                     <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Happy Birthday! 🎂</h1>
                                 </td>
                             </tr>
@@ -115,11 +122,10 @@ function kirimUcapanUltah($email_tujuan, $nama) {
 // LOGIKA UTAMA PENGECEKAN ULANG TAHUN
 // ==========================================
 
-// Mendapatkan tanggal dan bulan hari ini (format: MM-DD) berdasarkan WIB
 $hari_ini = date('m-d');
 
-// Cari anggota yang tanggal lahirnya sama dengan hari ini
-$sql = "SELECT nama, email FROM anggota_pdkisel WHERE DATE_FORMAT(tanggal_lahir, '%m-%d') = '$hari_ini'";
+// PENTING: Tambahkan 'foto' pada query SELECT
+$sql = "SELECT nama, email, foto FROM anggota_pdkisel WHERE DATE_FORMAT(tanggal_lahir, '%m-%d') = '$hari_ini'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -127,10 +133,12 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $nama = $row['nama'];
         $email = $row['email'];
+        $foto = $row['foto']; // Ambil data foto
         
         echo "Mengirim ke: " . $nama . " (" . $email . ") ... ";
         
-        if (kirimUcapanUltah($email, $nama)) {
+        // Kirim parameter $foto ke fungsi
+        if (kirimUcapanUltah($email, $nama, $foto)) {
             echo "<b style='color:green;'>BERHASIL</b><br>";
         } else {
             echo "<b style='color:red;'>GAGAL</b><br>";
