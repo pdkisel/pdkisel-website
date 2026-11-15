@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gereja             = $_POST['gereja'];
 
     // ==========================================
-    // PROSES UPLOAD FOTO
+    // PROSES UPLOAD FOTO (VALIDASI KETAT)
     // ==========================================
     $nama_file_foto = NULL;
 
@@ -36,18 +36,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $file_tmp  = $_FILES['foto']['tmp_name'];
         $file_name = $_FILES['foto']['name'];
         $file_size = $_FILES['foto']['size'];
-        $file_ext  = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-
-        $allowed_ext = ['jpg', 'jpeg', 'png'];
-        if (!in_array($file_ext, $allowed_ext)) {
-            die("Error: Format foto harus JPG, JPEG, atau PNG.");
-        }
-
+        
+        // 1. Validasi Ukuran (Maksimal 1MB)
         if ($file_size > 1048576) {
             die("Error: Ukuran foto terlalu besar. Maksimal 1MB.");
         }
 
-        $nama_file_foto = time() . "_" . preg_replace("/[^a-zA-Z0-9.]/", "_", $file_name);
+        // 2. Validasi MIME Type (Tipe File Asli)
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $file_tmp);
+        finfo_close($finfo);
+
+        $allowed_mime = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!in_array($mime_type, $allowed_mime)) {
+            die("Error: File yang diunggah bukan gambar yang valid.");
+        }
+
+        // 3. Validasi Tambahan menggunakan getimagesize (Memastikan benar-benar gambar)
+        $cek_gambar = getimagesize($file_tmp);
+        if ($cek_gambar === false) {
+            die("Error: File yang diunggah rusak atau bukan gambar.");
+        }
+
+        // 4. Tentukan Ekstensi Baru Berdasarkan MIME Type (Mencegah ekstensi palsu)
+        $ext_map = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/jpg'  => 'jpg'
+        ];
+        $file_ext = $ext_map[$mime_type];
+
+        // 5. Buat Nama File Unik
+        $nama_file_foto = time() . "_" . bin2hex(random_bytes(4)) . "." . $file_ext;
         $tujuan_upload = 'uploads/' . $nama_file_foto;
 
         if (!move_uploaded_file($file_tmp, $tujuan_upload)) {
@@ -78,10 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         
-        // ==========================================
         // PENGAMANAN XSS UNTUK EMAIL
-        // ==========================================
-        // Membersihkan nama sebelum dimasukkan ke email HTML
         $nama_aman = htmlspecialchars($nama, ENT_QUOTES, 'UTF-8');
         
         // Panggil fungsi kirim email dengan nama yang sudah aman
