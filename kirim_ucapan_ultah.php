@@ -31,7 +31,7 @@ function kirimUcapanUltah($email_tujuan, $nama) {
         $mail->addAddress($email_tujuan, $nama);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉';
+        $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
         $mail->Body = '
         <!DOCTYPE html>
@@ -45,45 +45,50 @@ function kirimUcapanUltah($email_tujuan, $nama) {
                     <td align="center">
                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10, 31, 68, 0.1);">
                             
-                            <!-- Header Ulang Tahun -->
+                            <!-- Header Ulang Tahun (Warna Merah Meriah) -->
                             <tr>
-                                <td align="center" style="background: linear-gradient(135deg, #0A1F44 0%, #1B3A6B 100%); padding: 40px 20px;">
-                                    <img src="https://pdkisel.id/assets/images/logo-pdkisel.png" alt="Logo PDKISEL" style="height: 80px; margin-bottom: 15px;">
-                                    <h1 style="color: #D4AF37; font-family: Georgia, serif; font-size: 28px; margin: 0; font-style: italic;">Happy Birthday!</h1>
+                                <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 50px 20px;">
+                                    <img src="https://pdkisel.id/assets/images/logo-pdkisel.png" alt="Logo PDKISEL" style="height: 80px; margin-bottom: 20px;">
+                                    <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Happy Birthday! 🎂</h1>
                                 </td>
                             </tr>
 
                             <!-- Body Email -->
                             <tr>
                                 <td style="padding: 40px 40px 30px 40px;">
-                                    <h2 style="color: #0A1F44; font-family: Helvetica, Arial, sans-serif; font-size: 22px; margin-top: 0;">Halo, ' . htmlspecialchars($nama) . '!</h2>
+                                    <h2 style="color: #D32F2F; font-family: Helvetica, Arial, sans-serif; font-size: 24px; margin-top: 0;">Halo, ' . htmlspecialchars($nama) . '!</h2>
                                     
-                                    <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 20px;">
-                                        Selamat ulang tahun! 🎂
+                                    <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
+                                        <b>Selamat ulang tahun!</b> 🎉🎈
                                     </p>
                                     
                                     <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 30px;">
-                                        Keluarga besar Persekutuan Doa Kisel (PDKISEL) mengucapkan selamat bertambah usia. Semoga Tuhan senantiasa melimpahkan berkat, kesehatan, dan hikmat dalam setiap langkah pelayanan dan pekerjaan Anda.
+                                        Keluarga besar Persekutuan Doa Kisel (PDKISEL) mengucapkan selamat bertambah usia. Semoga hari ini dipenuhi dengan sukacita, dan tahun yang baru ini membawa berkat, kesehatan, serta hikmat yang melimpah dari Tuhan.
                                     </p>
                                     
-                                    <blockquote style="border-left: 4px solid #D32F2F; padding-left: 15px; margin: 20px 0; color: #718096; font-style: italic;">
-                                        "TUHAN memberkati engkau dan melindungi engkau; TUHAN menyinari engkau dengan wajah-Nya dan memberi engkau kasih karunia;" <br><b>- Bilangan 6:24-25 -</b>
-                                    </blockquote>
-
-                                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+                                    <!-- Kotak Kutipan Ayat -->
+                                    <div style="background-color: #FFF5F5; border-left: 4px solid #D32F2F; padding: 20px; margin: 30px 0; border-radius: 0 8px 8px 0;">
+                                        <p style="color: #2D3748; font-size: 15px; line-height: 1.6; font-style: italic; margin: 0;">
+                                            "TUHAN memberkati engkau dan melindungi engkau; TUHAN menyinari engkau dengan wajah-Nya dan memberi engkau kasih karunia; TUHAN menghadapkan wajah-Nya kepadamu dan memberi engkau damai sejahtera."
+                                        </p>
+                                        <p style="color: #718096; font-size: 14px; margin: 10px 0 0 0; font-weight: bold;">
+                                            - Bilangan 6:24-26 -
+                                        </p>
+                                    </div>
                                     
                                     <p style="color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 0;">
-                                        Dengan kasih,<br>
+                                        Doa kami menyertai langkah Anda selalu.<br>
                                         <b style="color: #0A1F44;">Pengurus PDKISEL</b>
                                     </p>
                                 </td>
                             </tr>
 
-                            <!-- Footer -->
+                            <!-- Footer Navy Elegan -->
                             <tr>
                                 <td align="center" style="background-color: #0A1F44; padding: 20px;">
                                     <p style="color: #a0aec0; font-size: 12px; margin: 0;">
-                                        &copy; ' . date("Y") . ' Persekutuan Doa Kisel.
+                                        &copy; ' . date("Y") . ' Persekutuan Doa Kisel.<br>
+                                        Bersatu dalam Doa, Bertumbuh dalam Kristus.
                                     </p>
                                 </td>
                             </tr>
