@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendataan Anggota - PDKISEL</title>
+    <meta name="description" content="Formulir pendaftaran anggota Persekutuan Doa Kisel (PDKISEL).">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- File CSS Khusus Form (Akan kita buat nanti) -->
+    <link rel="stylesheet" href="assets/css/style-form.css">
+</head>
+<body class="form-body">
+
+    <!-- Tombol Kembali ke Beranda -->
+    <div class="form-nav">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a>
+    </div>
+
+    <!-- Container Utama Form -->
+    <div class="form-container">
+        
+        <!-- Header Form -->
+        <div class="form-header">
+            <img src="assets/images/logo-pdkisel.png" alt="Logo PDKISEL" class="form-logo">
+            <h1>Pendaftaran Anggota</h1>
+            <p>Mari bertumbuh bersama dalam persekutuan yang saling menguatkan.</p>
+        </div>
+
+        <!-- Form Start (Mengarah ke proses_daftar.php) -->
+        <form id="registrationForm" action="proses_daftar.php" method="POST">
+            
+            <!-- SEGMEN 1: IDENTITAS DIRI -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-user"></i> Identitas Diri</h2>
+                
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap Anda" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Aktif <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" placeholder="nama@email.com" required>
+                        <small class="hint">Email ini akan digunakan untuk notifikasi pendaftaran.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="no_hp">Nomor HP / WhatsApp <span class="required">*</span></label>
+                        <input type="tel" id="no_hp" name="no_hp" placeholder="0812xxxxxx" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="alamat">Alamat Domisili <span class="required">*</span></label>
+                    <textarea id="alamat" name="alamat" rows="3" placeholder="Jl. Contoh No. 123, Kota, Provinsi..." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="jenis_kelamin">Jenis Kelamin <span class="required">*</span></label>
+                        <select id="jenis_kelamin" name="jenis_kelamin" required>
+                            <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                            <option value="Pria">Pria</option>
+                            <option value="Wanita">Wanita</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal_lahir">Tanggal Lahir <span class="required">*</span></label>
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEGMEN 2: DATA PEKERJAAN -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-briefcase"></i> Data Pekerjaan</h2>
+
+                <div class="form-group">
+                    <label for="status_karyawan">Status Karyawan <span class="required">*</span></label>
+                    <select id="status_karyawan" name="status_karyawan" required>
+                        <option value="" disabled selected>Pilih Status Karyawan</option>
+                        <option value="Tetap">Tetap</option>
+                        <option value="Kontrak PKWT">Kontrak PKWT</option>
+                        <option value="Kontrak Project">Kontrak Project</option>
+                    </select>
+                </div>
+
+                <!-- Field Masa Kontrak (Akan muncul jika memilih Kontrak) -->
+                <div class="form-row conditional-field" id="masa_kontrak_group" style="display: none;">
+                    <div class="form-group">
+                        <label for="kontrak_mulai">Masa Kontrak Mulai <span class="required">*</span></label>
+                        <input type="date" id="kontrak_mulai" name="kontrak_mulai">
+                    </div>
+                    <div class="form-group">
+                        <label for="kontrak_selesai">Masa Kontrak Selesai <span class="required">*</span></label>
+                        <input type="date" id="kontrak_selesai" name="kontrak_selesai">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="anak_usaha">Anak Usaha <span class="required">*</span></label>
+                    <select id="anak_usaha" name="anak_usaha" required>
+                        <option value="" disabled selected>Pilih Anak Usaha</option>
+                        <option value="Holding Kisel">Holding Kisel</option>
+                        <option value="PT. KSP">PT. KSP</option>
+                        <option value="PT. KUT">PT. KUT</option>
+                        <option value="PT. KAM">PT. KAM</option>
+                        <option value="PT. KSS">PT. KSS</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="regional">Regional Kerja <span class="required">*</span></label>
+                    <select id="regional" name="regional" required>
+                        <option value="" disabled selected>Pilih Regional Kerja</option>
+                        <option value="Regional Sumbagut">Regional Sumbagut</option>
+                        <option value="Regional Sumbagteng">Regional Sumbagteng</option>
+                        <option value="Regional Sumbagsel">Regional Sumbagsel</option>
+                        <option value="Jabotabek & Jabar">Jabotabek & Jabar</option>
+                        <option value="Jawa Tengah">Jawa Tengah</option>
+                        <option value="Jawa Timur">Jawa Timur</option>
+                        <option value="Balinusra">Balinusra</option>
+                        <option value="Kalimantan">Kalimantan</option>
+                        <option value="Sulawesi">Sulawesi</option>
+                        <option value="Puma">Puma</option>
+                    </select>
+                </div>
+
+                <!-- Field Lokasi Kantor (Akan muncul jika Regional dipilih) -->
+                <div class="form-group conditional-field" id="lokasi_kantor_group" style="display: none;">
+                    <label for="lokasi_kantor">Lokasi Kantor Penempatan <span class="required">*</span></label>
+                    <input type="text" id="lokasi_kantor" name="lokasi_kantor" placeholder="Cth: Kantor Cabang Medan">
+                </div>
+            </div>
+
+            <!-- SEGMEN 3: KELUARGA & GEREJA -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-heart"></i> Keluarga & Gereja</h2>
+
+                <div class="form-group">
+                    <label for="status_pernikahan">Status Pernikahan <span class="required">*</span></label>
+                    <select id="status_pernikahan" name="status_pernikahan" required>
+                        <option value="" disabled selected>Pilih Status Pernikahan</option>
+                        <option value="Belum Menikah">Belum Menikah</option>
+                        <option value="Menikah">Menikah</option>
+                    </select>
+                </div>
+
+                <!-- Field Jumlah Anak (Akan muncul jika Menikah) -->
+                <div class="form-group conditional-field" id="jumlah_anak_group" style="display: none;">
+                    <label for="jumlah_anak">Jumlah Anak</label>
+                    <input type="number" id="jumlah_anak" name="jumlah_anak" min="0" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="gereja">Nama Gereja / Jemaat <span class="required">*</span></label>
+                    <input type="text" id="gereja" name="gereja" placeholder="Cth: GKI, HKBP, GBI..." required>
+                </div>
+            </div>
+
+            <!-- KONFIRMASI & SUBMIT -->
+            <div class="form-section form-footer">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="persetujuan" name="persetujuan" required>
+                    <label for="persetujuan">Saya menyetujui data ini digunakan untuk keperluan internal Persekutuan Doa Kisel (PDKISEL).</label>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="btnSubmit">
+                    Kirim Data Pendaftaran <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Script JavaScript Khusus Form (Akan kita buat nanti) -->
+    <script src="assets/js/form.js"></script>
+
+</body>
+</html>
