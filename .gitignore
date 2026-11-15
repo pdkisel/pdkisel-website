@@ -1,0 +1,3 @@
+# Mengabaikan semua file gambar di dalam folder uploads
+uploads/*
+!uploads/.gitkeep
