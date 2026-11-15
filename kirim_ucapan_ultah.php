@@ -14,7 +14,7 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 
 // Fungsi khusus untuk mengirim ucapan ulang tahun
-function kirimUcapanUltah($email_tujuan, $nama, $foto) {
+function kirimUcapanUltah($email_tujuan, $nama) {
     $mail = new PHPMailer(true);
 
     try {
@@ -34,11 +34,16 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
         $mail->isHTML(true);
         $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
-        // Menentukan URL Foto Publik
-        if (!empty($foto)) {
-            $url_foto = 'https://pdkisel.id/uploads/' . $foto;
-        } else {
-            $url_foto = 'https://pdkisel.id/assets/images/logo-pdkisel.png'; // Fallback ke logo
+        // ==========================================
+        // LOGIKA MEMBUAT INISIAL NAMA (Maksimal 2 huruf)
+        // ==========================================
+        $kata = explode(' ', trim($nama));
+        $inisial = '';
+        if (count($kata) > 0) {
+            $inisial .= strtoupper(substr($kata[0], 0, 1)); // Huruf depan nama pertama
+            if (count($kata) > 1) {
+                $inisial .= strtoupper(substr(end($kata), 0, 1)); // Huruf depan nama terakhir
+            }
         }
 
         $mail->Body = '
@@ -53,10 +58,15 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
                     <td align="center">
                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10, 31, 68, 0.1);">
                             
-                            <!-- Header Ulang Tahun -->
+                            <!-- Header Ulang Tahun (Merah dengan Inisial) -->
                             <tr>
                                 <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 40px 20px;">
-                                    <img src="' . $url_foto . '" alt="Foto ' . htmlspecialchars($nama) . '" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
+                                    
+                                    <!-- LINGKARAN INISIAL NAMA -->
+                                    <div style="width: 100px; height: 100px; background-color: #FFFFFF; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; border: 4px solid rgba(255,255,255,0.3); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                                        <span style="font-family: Arial, sans-serif; font-size: 40px; font-weight: bold; color: #D32F2F; line-height: 100px;">' . $inisial . '</span>
+                                    </div>
+
                                     <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Happy Birthday! 🎂</h1>
                                 </td>
                             </tr>
@@ -120,7 +130,7 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
 // ==========================================
 $hari_ini = date('m-d');
 
-$sql = "SELECT nama, email, foto FROM anggota_pdkisel WHERE DATE_FORMAT(tanggal_lahir, '%m-%d') = '$hari_ini'";
+$sql = "SELECT nama, email FROM anggota_pdkisel WHERE DATE_FORMAT(tanggal_lahir, '%m-%d') = '$hari_ini'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -128,11 +138,10 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $nama = $row['nama'];
         $email = $row['email'];
-        $foto = $row['foto']; 
         
         echo "Mengirim ke: " . $nama . " (" . $email . ") ... ";
         
-        if (kirimUcapanUltah($email, $nama, $foto)) {
+        if (kirimUcapanUltah($email, $nama)) {
             echo "<b style='color:green;'>BERHASIL</b><br>";
         } else {
             echo "<b style='color:red;'>GAGAL</b><br>";
