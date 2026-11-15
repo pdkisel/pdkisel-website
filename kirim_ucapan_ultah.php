@@ -14,7 +14,7 @@ function kirimUcapanUltah($email_tujuan, $nama) {
         $mail->Host       = 'smtp.hostinger.com'; 
         $mail->SMTPAuth   = true;
         $mail->Username   = 'halo@pdkisel.id'; 
-        $mail->Password   = 'PASSWORD_EMAIL_HALO_ANDA'; // GANTI DENGAN PASSWORD ANDA
+        $mail->Password   = '@PdShi3ld2026'; // GANTI DENGAN PASSWORD ANDA
         
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
