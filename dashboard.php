@@ -108,25 +108,43 @@ $result = $conn->query($sql);
         /* === STYLES UNTUK BARIS DETAIL (ACCORDION) === */
         .detail-row {
             display: none;
-            background-color: #F8FAFC;
+            background-color: #FFFFFF;
         }
         .detail-row td {
             padding: 0;
-            border-bottom: 2px solid #E2E8F0;
+            border-bottom: 2px solid #0A1F44; /* Garis pemisah tebal di akhir */
         }
-        .detail-container {
-            padding: 20px 30px;
+        .detail-wrapper {
+            padding: 30px;
+            background-color: #F8FAFC;
+        }
+        
+        .detail-section-title {
+            font-family: 'Poppins', sans-serif;
+            color: #0A1F44;
+            font-size: 1rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .detail-section-title:first-child {
+            margin-top: 0;
+        }
+        .detail-section-title i {
+            color: #D32F2F;
+        }
+
+        .detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            gap: 15px 30px;
         }
         .detail-item {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .detail-label {
             font-size: 0.75rem;
@@ -134,7 +152,7 @@ $result = $conn->query($sql);
             font-weight: 600;
             text-transform: uppercase;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         .detail-value {
             font-size: 0.95rem;
@@ -191,17 +209,25 @@ $result = $conn->query($sql);
                             // BARIS DETAIL (Tersembunyi di bawahnya)
                             echo "<tr id='detail-row-".$id_row."' class='detail-row'>";
                             echo "<td colspan='7'>"; 
-                            echo "<div class='detail-container'>";
+                            echo "<div class='detail-wrapper'>";
                             
+                            // --- SEKSI 1: IDENTITAS ---
+                            echo "<div class='detail-section-title'><i class='fas fa-user-circle'></i> Identitas Diri</div>";
+                            echo "<div class='detail-grid'>";
                             echo "<div class='detail-item'><span class='detail-label'>Nama Lengkap</span><span class='detail-value'>" . htmlspecialchars($row['nama']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Email</span><span class='detail-value'>" . htmlspecialchars($row['email']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>No HP / WA</span><span class='detail-value'>" . htmlspecialchars($row['no_hp']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Jenis Kelamin</span><span class='detail-value'>" . htmlspecialchars($row['jenis_kelamin']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Tanggal Lahir</span><span class='detail-value'>" . date('d F Y', strtotime($row['tanggal_lahir'])) . "</span></div>";
-                            echo "<div class='detail-item'><span class='detail-label'>Status Pernikahan</span><span class='detail-value'>" . htmlspecialchars($row['status_pernikahan']) . "</span></div>";
-                            echo "<div class='detail-item'><span class='detail-label'>Jumlah Anak</span><span class='detail-value'>" . htmlspecialchars($row['jumlah_anak']) . "</span></div>";
-                            echo "<div class='detail-item'><span class='detail-label'>Gereja</span><span class='detail-value'>" . htmlspecialchars($row['gereja']) . "</span></div>";
+                            echo "<div class='detail-item full-width'><span class='detail-label'>Alamat Domisili</span><span class='detail-value'>" . htmlspecialchars($row['alamat']) . "</span></div>";
+                            echo "</div>";
+
+                            // --- SEKSI 2: PEKERJAAN ---
+                            echo "<div class='detail-section-title'><i class='fas fa-briefcase'></i> Data Pekerjaan</div>";
+                            echo "<div class='detail-grid'>";
+                            echo "<div class='detail-item'><span class='detail-label'>Status Karyawan</span><span class='detail-value'>" . htmlspecialchars($row['status_karyawan']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Anak Usaha</span><span class='detail-value'>" . htmlspecialchars($row['anak_usaha']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Regional</span><span class='detail-value'>" . htmlspecialchars($row['regional']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Lokasi Kantor</span><span class='detail-value'>" . htmlspecialchars($row['lokasi_kantor'] ?? '-') . "</span></div>";
                             
                             // Logika Masa Kontrak
@@ -210,9 +236,19 @@ $result = $conn->query($sql);
                                 $kontrak = date('d M Y', strtotime($row['kontrak_mulai'])) . " s/d " . date('d M Y', strtotime($row['kontrak_selesai']));
                             }
                             echo "<div class='detail-item full-width'><span class='detail-label'>Masa Kontrak</span><span class='detail-value'>" . $kontrak . "</span></div>";
-                            
-                            echo "<div class='detail-item full-width'><span class='detail-label'>Alamat Domisili</span><span class='detail-value'>" . htmlspecialchars($row['alamat']) . "</span></div>";
-                            echo "<div class='detail-item full-width'><span class='detail-label'>Waktu Pendaftaran</span><span class='detail-value'>" . date('d F Y, H:i', strtotime($row['waktu_daftar'])) . " WIB</span></div>";
+                            echo "</div>";
+
+                            // --- SEKSI 3: KELUARGA & GEREJA ---
+                            echo "<div class='detail-section-title'><i class='fas fa-heart'></i> Keluarga & Gereja</div>";
+                            echo "<div class='detail-grid'>";
+                            echo "<div class='detail-item'><span class='detail-label'>Status Pernikahan</span><span class='detail-value'>" . htmlspecialchars($row['status_pernikahan']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Jumlah Anak</span><span class='detail-value'>" . htmlspecialchars($row['jumlah_anak']) . "</span></div>";
+                            echo "<div class='detail-item full-width'><span class='detail-label'>Gereja / Jemaat</span><span class='detail-value'>" . htmlspecialchars($row['gereja']) . "</span></div>";
+                            echo "</div>";
+
+                            echo "<div style='margin-top: 20px; text-align: right; font-size: 0.8rem; color: #A0AEC0;'>";
+                            echo "Terdaftar pada: " . date('d F Y, H:i', strtotime($row['waktu_daftar'])) . " WIB";
+                            echo "</div>";
 
                             echo "</div>"; 
                             echo "</td>";
