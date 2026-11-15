@@ -14,7 +14,6 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 
 // Fungsi khusus untuk mengirim ucapan ulang tahun
-// Tambahan parameter $foto untuk menerima nama file foto
 function kirimUcapanUltah($email_tujuan, $nama, $foto) {
     $mail = new PHPMailer(true);
 
@@ -35,11 +34,27 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
         $mail->isHTML(true);
         $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
-        // Menentukan URL Foto (Jika tidak ada foto, gunakan ikon default)
+        // ==========================================
+        // LOGIKA BASE64 UNTUK FOTO
+        // ==========================================
+        $foto_base64 = '';
         if (!empty($foto)) {
-            $url_foto = 'https://pdkisel.id/uploads/' . $foto;
-        } else {
-            $url_foto = 'https://pdkisel.id/assets/images/logo-pdkisel.png'; // Fallback ke logo
+            $path_foto = 'uploads/' . $foto; // Path lokal di server Hostinger
+            if (file_exists($path_foto)) {
+                $file_data = file_get_contents($path_foto);
+                $file_type = pathinfo($path_foto, PATHINFO_EXTENSION);
+                // Format: data:image/jpeg;base64,....
+                $foto_base64 = 'data:image/' . $file_type . ';base64,' . base64_encode($file_data);
+            }
+        }
+
+        // Jika foto kosong atau gagal dibaca, gunakan logo PDKISEL sebagai gantinya
+        if (empty($foto_base64)) {
+            $logo_path = 'assets/images/logo-pdkisel.png';
+            if (file_exists($logo_path)) {
+                $file_data = file_get_contents($logo_path);
+                $foto_base64 = 'data:image/png;base64,' . base64_encode($file_data);
+            }
         }
 
         $mail->Body = '
@@ -54,12 +69,10 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
                     <td align="center">
                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10, 31, 68, 0.1);">
                             
-                            <!-- Header Ulang Tahun (Warna Merah Meriah dengan Foto) -->
+                            <!-- Header Ulang Tahun (Warna Merah Meriah dengan Foto Base64) -->
                             <tr>
                                 <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 40px 20px;">
-                                    <!-- FOTO PROFIL BULAT -->
-                                    <img src="' . $url_foto . '" alt="Foto ' . htmlspecialchars($nama) . '" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
-                                    
+                                    <img src="' . $foto_base64 . '" alt="Foto ' . htmlspecialchars($nama) . '" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
                                     <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Happy Birthday! 🎂</h1>
                                 </td>
                             </tr>
@@ -121,10 +134,8 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
 // ==========================================
 // LOGIKA UTAMA PENGECEKAN ULANG TAHUN
 // ==========================================
-
 $hari_ini = date('m-d');
 
-// PENTING: Tambahkan 'foto' pada query SELECT
 $sql = "SELECT nama, email, foto FROM anggota_pdkisel WHERE DATE_FORMAT(tanggal_lahir, '%m-%d') = '$hari_ini'";
 $result = $conn->query($sql);
 
@@ -133,11 +144,10 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $nama = $row['nama'];
         $email = $row['email'];
-        $foto = $row['foto']; // Ambil data foto
+        $foto = $row['foto']; 
         
         echo "Mengirim ke: " . $nama . " (" . $email . ") ... ";
         
-        // Kirim parameter $foto ke fungsi
         if (kirimUcapanUltah($email, $nama, $foto)) {
             echo "<b style='color:green;'>BERHASIL</b><br>";
         } else {
