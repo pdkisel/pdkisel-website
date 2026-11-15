@@ -1,6 +1,6 @@
 <?php
 // Konfigurasi Database Hostinger
-$host = "srv1761.hstgr.io";
+$host = "localhost";
 $user = "u613848645_pdkiselgroup"; // Username database Anda
 $pass = "WamnqfL8GK5&"; // GANTI DENGAN PASSWORD DATABASE ANDA
 $db   = "u613848645_pdkisel"; // Nama database Anda
