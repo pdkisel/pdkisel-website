@@ -2,9 +2,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+// Path sudah disesuaikan dengan folder di Hostinger
+require 'PHPMailer/Exception.php';
+require 'PHPMailer/PHPMailer.php';
+require 'PHPMailer/SMTP.php';
 
 function kirimNotifikasi($email_tujuan, $nama) {
     $mail = new PHPMailer(true);
@@ -15,10 +16,10 @@ function kirimNotifikasi($email_tujuan, $nama) {
         $mail->Host       = 'smtp.hostinger.com'; 
         $mail->SMTPAuth   = true;
         
-        // PENTING: Gunakan EMAIL UTAMA (bukan alias) untuk login
+        // PENTING: Gunakan EMAIL UTAMA untuk login SMTP
         $mail->Username   = 'halo@pdkisel.id'; 
         
-        // GANTI dengan password email halo@pdkisel.id Anda
+        // GANTI DENGAN PASSWORD EMAIL ANDA
         $mail->Password   = '@PdShi3ld2026'; 
         
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
