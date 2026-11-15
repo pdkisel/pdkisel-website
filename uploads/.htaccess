@@ -1,0 +1,11 @@
+# Mematikan eksekusi script PHP di folder ini
+<Files *.php>
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+# Memastikan hanya file gambar yang bisa diakses
+<FilesMatch "\.(jpg|jpeg|png|gif)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
