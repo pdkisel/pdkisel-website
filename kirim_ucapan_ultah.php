@@ -35,14 +35,14 @@ function kirimUcapanUltah($email_tujuan, $nama) {
         $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
         // ==========================================
-        // LOGIKA MEMBUAT INISIAL NAMA (Maksimal 2 huruf)
+        // LOGIKA MEMBUAT INISIAL NAMA
         // ==========================================
         $kata = explode(' ', trim($nama));
         $inisial = '';
         if (count($kata) > 0) {
-            $inisial .= strtoupper(substr($kata[0], 0, 1)); // Huruf depan nama pertama
+            $inisial .= strtoupper(substr($kata[0], 0, 1));
             if (count($kata) > 1) {
-                $inisial .= strtoupper(substr(end($kata), 0, 1)); // Huruf depan nama terakhir
+                $inisial .= strtoupper(substr(end($kata), 0, 1));
             }
         }
 
@@ -58,23 +58,23 @@ function kirimUcapanUltah($email_tujuan, $nama) {
                     <td align="center">
                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10, 31, 68, 0.1);">
                             
-                            <!-- Header Ulang Tahun (Merah dengan Inisial) -->
+                            <!-- Header Ulang Tahun (Merah & Navy Elegan dengan Inisial Emas) -->
                             <tr>
-                                <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 40px 20px;">
+                                <td align="center" style="background: linear-gradient(135deg, #B71C1C 0%, #D32F2F 100%); padding: 50px 20px; border-bottom: 5px solid #0A1F44;">
                                     
-                                    <!-- LINGKARAN INISIAL NAMA -->
-                                    <div style="width: 100px; height: 100px; background-color: #FFFFFF; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; border: 4px solid rgba(255,255,255,0.3); box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-                                        <span style="font-family: Arial, sans-serif; font-size: 40px; font-weight: bold; color: #D32F2F; line-height: 100px;">' . $inisial . '</span>
+                                    <!-- LINGKARAN INISIAL ELEGAN (Border Emas) -->
+                                    <div style="width: 100px; height: 100px; background-color: transparent; border: 2px solid #D4AF37; border-radius: 50%; margin: 0 auto 25px auto; display: table;">
+                                        <span style="display: table-cell; vertical-align: middle; text-align: center; font-family: Georgia, serif; font-size: 36px; font-weight: bold; color: #D4AF37; letter-spacing: 1px;">' . $inisial . '</span>
                                     </div>
 
-                                    <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Happy Birthday! 🎂</h1>
+                                    <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); font-weight: normal;">Happy Birthday! 🎂</h1>
                                 </td>
                             </tr>
 
                             <!-- Body Email -->
                             <tr>
                                 <td style="padding: 40px 40px 30px 40px;">
-                                    <h2 style="color: #D32F2F; font-family: Helvetica, Arial, sans-serif; font-size: 24px; margin-top: 0;">Halo, ' . htmlspecialchars($nama) . '!</h2>
+                                    <h2 style="color: #0A1F44; font-family: Helvetica, Arial, sans-serif; font-size: 24px; margin-top: 0;">Halo, ' . htmlspecialchars($nama) . '!</h2>
                                     
                                     <p style="color: #4a5568; font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
                                         <b>Selamat ulang tahun!</b> 🎉🎈
@@ -85,7 +85,7 @@ function kirimUcapanUltah($email_tujuan, $nama) {
                                     </p>
                                     
                                     <!-- Kotak Kutipan Ayat -->
-                                    <div style="background-color: #FFF5F5; border-left: 4px solid #D32F2F; padding: 20px; margin: 30px 0; border-radius: 0 8px 8px 0;">
+                                    <div style="background-color: #F8FAFC; border-left: 4px solid #D4AF37; padding: 20px; margin: 30px 0; border-radius: 0 8px 8px 0;">
                                         <p style="color: #2D3748; font-size: 15px; line-height: 1.6; font-style: italic; margin: 0;">
                                             "TUHAN memberkati engkau dan melindungi engkau; TUHAN menyinari engkau dengan wajah-Nya dan memberi engkau kasih karunia; TUHAN menghadapkan wajah-Nya kepadamu dan memberi engkau damai sejahtera."
                                         </p>
