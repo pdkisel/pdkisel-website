@@ -1,4 +1,7 @@
 <?php
+// Mengunci zona waktu ke Waktu Indonesia Barat (WIB)
+date_default_timezone_set('Asia/Jakarta');
+
 // Mencegah browser menyimpan halaman di cache (Anti tombol Back)
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -412,7 +415,6 @@ $result = $conn->query($sql);
             var filterStatus = document.getElementById('filterStatus').value;
             var filterRegional = document.getElementById('filterRegional').value;
             
-            // Ambil nilai filter dari Infografis jika ada
             var infoKategori = window.currentInfoKategori || 'all';
             var infoNilai = window.currentInfoNilai || '';
 
@@ -426,21 +428,14 @@ $result = $conn->query($sql);
                 
                 var match = true;
 
-                // A. Cek Filter Infografis
                 if (infoKategori === 'status_karyawan' && rowStatus !== infoNilai) match = false;
                 if (infoKategori === 'anak_usaha' && rowUsaha !== infoNilai) match = false;
                 if (infoKategori === 'regional' && rowRegional !== infoNilai) match = false;
 
-                // B. Cek Filter Toolbar (Pencarian)
                 if (searchText && !rowSearch.includes(searchText)) match = false;
-
-                // C. Cek Filter Toolbar (Dropdown Status)
                 if (filterStatus && rowStatus !== filterStatus) match = false;
-
-                // D. Cek Filter Toolbar (Dropdown Regional)
                 if (filterRegional && rowRegional !== filterRegional) match = false;
 
-                // Tampilkan/Sembunyikan
                 if (match) {
                     row.classList.remove('hidden-row');
                 } else {
@@ -451,11 +446,9 @@ $result = $conn->query($sql);
 
         // 3. Fungsi Klik Infografis
         function filterInfografis(kategori, nilai) {
-            // Simpan state filter infografis
             window.currentInfoKategori = kategori;
             window.currentInfoNilai = nilai;
 
-            // Sinkronkan Dropdown Toolbar
             if (kategori === 'status_karyawan') {
                 document.getElementById('filterStatus').value = nilai;
                 document.getElementById('filterRegional').value = '';
@@ -463,30 +456,23 @@ $result = $conn->query($sql);
                 document.getElementById('filterRegional').value = nilai;
                 document.getElementById('filterStatus').value = '';
             } else {
-                // Jika klik 'all' (total)
                 document.getElementById('filterStatus').value = '';
                 document.getElementById('filterRegional').value = '';
             }
 
-            // Kosongkan pencarian saat klik infografis
             document.getElementById('searchInput').value = '';
-
-            // Panggil fungsi filter terpadu
             terapkanFilter();
         }
 
         // 4. Fungsi Reset Filter
         function resetFilter() {
-            // Kosongkan input
             document.getElementById('searchInput').value = '';
             document.getElementById('filterStatus').value = '';
             document.getElementById('filterRegional').value = '';
             
-            // Reset state infografis
             window.currentInfoKategori = 'all';
             window.currentInfoNilai = '';
 
-            // Tampilkan semua baris
             var rows = document.querySelectorAll('.data-row');
             rows.forEach(function(row) {
                 row.classList.remove('hidden-row');
