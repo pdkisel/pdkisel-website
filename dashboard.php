@@ -114,12 +114,18 @@ $result = $conn->query($sql);
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            text-decoration: none;
         }
         .btn-terapkan { background-color: #0A1F44; color: #FFFFFF; }
         .btn-terapkan:hover { background-color: #D32F2F; }
+        
         .btn-reset { background-color: #E2E8F0; color: #4A5568; }
         .btn-reset:hover { background-color: #CBD5E0; }
+        
+        .btn-export { background-color: #38A169; color: #FFFFFF; }
+        .btn-export:hover { background-color: #2F855A; }
 
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #E2E8F0; font-size: 0.9rem; vertical-align: middle; }
@@ -172,7 +178,7 @@ $result = $conn->query($sql);
         @media (max-width: 768px) {
             .filter-toolbar { flex-direction: column; align-items: stretch; }
             .filter-group { width: 100%; }
-            .btn-filter-action { justify-content: center; width: 100%; }
+            .btn-filter-action { width: 100%; }
         }
     </style>
 </head>
@@ -285,6 +291,7 @@ $result = $conn->query($sql);
                 <!-- Tombol Aksi -->
                 <button class="btn-filter-action btn-terapkan" onclick="terapkanFilter()"><i class="fas fa-filter"></i> Terapkan</button>
                 <button class="btn-filter-action btn-reset" onclick="resetFilter()"><i class="fas fa-sync-alt"></i> Reset</button>
+                <a href="export.php" class="btn-filter-action btn-export"><i class="fas fa-file-csv"></i> Export CSV</a>
             </div>
 
             <table id="dataTable">
