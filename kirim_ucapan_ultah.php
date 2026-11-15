@@ -34,27 +34,11 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
         $mail->isHTML(true);
         $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
-        // ==========================================
-        // LOGIKA BASE64 UNTUK FOTO
-        // ==========================================
-        $foto_base64 = '';
+        // Menentukan URL Foto Publik
         if (!empty($foto)) {
-            $path_foto = 'uploads/' . $foto; // Path lokal di server Hostinger
-            if (file_exists($path_foto)) {
-                $file_data = file_get_contents($path_foto);
-                $file_type = pathinfo($path_foto, PATHINFO_EXTENSION);
-                // Format: data:image/jpeg;base64,....
-                $foto_base64 = 'data:image/' . $file_type . ';base64,' . base64_encode($file_data);
-            }
-        }
-
-        // Jika foto kosong atau gagal dibaca, gunakan logo PDKISEL sebagai gantinya
-        if (empty($foto_base64)) {
-            $logo_path = 'assets/images/logo-pdkisel.png';
-            if (file_exists($logo_path)) {
-                $file_data = file_get_contents($logo_path);
-                $foto_base64 = 'data:image/png;base64,' . base64_encode($file_data);
-            }
+            $url_foto = 'https://pdkisel.id/uploads/' . $foto;
+        } else {
+            $url_foto = 'https://pdkisel.id/assets/images/logo-pdkisel.png'; // Fallback ke logo
         }
 
         $mail->Body = '
@@ -69,10 +53,10 @@ function kirimUcapanUltah($email_tujuan, $nama, $foto) {
                     <td align="center">
                         <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10, 31, 68, 0.1);">
                             
-                            <!-- Header Ulang Tahun (Warna Merah Meriah dengan Foto Base64) -->
+                            <!-- Header Ulang Tahun -->
                             <tr>
                                 <td align="center" style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%); padding: 40px 20px;">
-                                    <img src="' . $foto_base64 . '" alt="Foto ' . htmlspecialchars($nama) . '" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
+                                    <img src="' . $url_foto . '" alt="Foto ' . htmlspecialchars($nama) . '" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 4px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px;">
                                     <h1 style="color: #FFFFFF; font-family: Georgia, serif; font-size: 32px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Happy Birthday! 🎂</h1>
                                 </td>
                             </tr>
