@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // ==========================================
-    // QUERY MENGGUNAKAN PREPARED STATEMENTS (AMAN DARI SQL INJECTION)
+    // QUERY MENGGUNAKAN PREPARED STATEMENTS
     // ==========================================
     $sql = "INSERT INTO anggota_pdkisel (
                 nama, email, no_hp, alamat, jenis_kelamin, tanggal_lahir, 
@@ -69,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare($sql);
     
-    // Bind parameter (s = string, i = integer)
     $stmt->bind_param("sssssssssssssiss", 
         $nama, $email, $no_hp, $alamat, $jenis_kelamin, $tanggal_lahir,
         $status_karyawan, $kontrak_mulai, $kontrak_selesai,
@@ -79,8 +78,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         
-        // Panggil fungsi kirim email
-        kirimNotifikasi($email, $nama);
+        // ==========================================
+        // PENGAMANAN XSS UNTUK EMAIL
+        // ==========================================
+        // Membersihkan nama sebelum dimasukkan ke email HTML
+        $nama_aman = htmlspecialchars($nama, ENT_QUOTES, 'UTF-8');
+        
+        // Panggil fungsi kirim email dengan nama yang sudah aman
+        kirimNotifikasi($email, $nama_aman);
 
         echo "<script>
                 alert('Pendaftaran Berhasil! Silakan cek email Anda untuk konfirmasi.');
