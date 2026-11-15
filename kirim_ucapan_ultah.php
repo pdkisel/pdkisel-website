@@ -5,8 +5,13 @@ date_default_timezone_set('Asia/Jakarta');
 // Panggil file koneksi database
 require 'koneksi.php';
 
-// Panggil fungsi pengirim email (menggunakan PHPMailer yang sudah ada)
-require 'kirim_email.php';
+// Panggil library PHPMailer secara langsung
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/Exception.php';
+require 'PHPMailer/PHPMailer.php';
+require 'PHPMailer/SMTP.php';
 
 // Fungsi khusus untuk mengirim ucapan ulang tahun
 function kirimUcapanUltah($email_tujuan, $nama) {
