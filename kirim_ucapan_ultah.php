@@ -1,4 +1,7 @@
 <?php
+// Mengunci zona waktu ke Waktu Indonesia Barat (WIB)
+date_default_timezone_set('Asia/Jakarta');
+
 // Panggil file koneksi database
 require 'koneksi.php';
 
@@ -14,7 +17,7 @@ function kirimUcapanUltah($email_tujuan, $nama) {
         $mail->Host       = 'smtp.hostinger.com'; 
         $mail->SMTPAuth   = true;
         $mail->Username   = 'halo@pdkisel.id'; 
-        $mail->Password   = '@PdShi3ld2026'; // GANTI DENGAN PASSWORD ANDA
+        $mail->Password   = 'PASSWORD_EMAIL_HALO_ANDA'; // GANTI DENGAN PASSWORD ANDA
         
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
@@ -98,7 +101,7 @@ function kirimUcapanUltah($email_tujuan, $nama) {
 // LOGIKA UTAMA PENGECEKAN ULANG TAHUN
 // ==========================================
 
-// Mendapatkan tanggal dan bulan hari ini (format: MM-DD)
+// Mendapatkan tanggal dan bulan hari ini (format: MM-DD) berdasarkan WIB
 $hari_ini = date('m-d');
 
 // Cari anggota yang tanggal lahirnya sama dengan hari ini
@@ -120,7 +123,7 @@ if ($result->num_rows > 0) {
         }
     }
 } else {
-    echo "Tidak ada anggota yang berulang tahun hari ini (" . date('d F') . ").";
+    echo "Tidak ada anggota yang berulang tahun hari ini (" . date('d F Y') . ").";
 }
 
 $conn->close();
