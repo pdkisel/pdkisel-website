@@ -2,9 +2,12 @@
 // Panggil file koneksi database
 require 'koneksi.php';
 
+// Panggil fungsi pengirim email
+require 'kirim_email.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Ambil data dari form dan amankan (mencegah SQL Injection)
+    // Ambil data dari form dan amankan
     $nama               = $conn->real_escape_string($_POST['nama']);
     $email              = $conn->real_escape_string($_POST['email']);
     $no_hp              = $conn->real_escape_string($_POST['no_hp']);
@@ -39,13 +42,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         
+        // Panggil fungsi kirim email setelah data berhasil disimpan
+        kirimNotifikasi($email, $nama);
+
         // Tampilkan pesan sukses dan redirect
         echo "<script>
-                alert('Pendaftaran Berhasil! Data Anda telah kami simpan.');
+                alert('Pendaftaran Berhasil! Silakan cek email Anda untuk konfirmasi.');
                 window.location.href = 'index.html';
               </script>";
     } else {
-        // Jika gagal simpan ke database
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
