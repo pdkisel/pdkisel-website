@@ -1,6 +1,4 @@
 <?php
-// PENTING: Anda harus mengunduh PHPMailer dan mengunggahnya ke Hostinger
-// Kita asumsikan PHPMailer diletakkan di folder 'PHPMailer/src/'
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -13,17 +11,23 @@ function kirimNotifikasi($email_tujuan, $nama) {
 
     try {
         // Konfigurasi Server SMTP Hostinger
-        // GANTI 'email_anda@pdkisel.id' dan 'password_email_anda' dengan akun email Hostinger Anda
         $mail->isSMTP();
         $mail->Host       = 'smtp.hostinger.com'; 
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'halo@pdkisel.id'; // Email yang dibuat di Hostinger
-        $mail->Password   = '@PdShi3ld2026'; // Password email tersebut
+        
+        // PENTING: Gunakan EMAIL UTAMA (bukan alias) untuk login
+        $mail->Username   = 'halo@pdkisel.id'; 
+        
+        // GANTI dengan password email halo@pdkisel.id Anda
+        $mail->Password   = 'PASSWORD_EMAIL_HALO_ANDA'; 
+        
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
-        // Pengirim
+        // Pengirim yang akan dilihat oleh penerima email
         $mail->setFrom('no-reply@pdkisel.id', 'PDKISEL');
+        
+        // Email tujuan
         $mail->addAddress($email_tujuan, $nama);
 
         // Konten Email
@@ -31,14 +35,16 @@ function kirimNotifikasi($email_tujuan, $nama) {
         $mail->Subject = 'Pendaftaran Anggota PDKISEL Berhasil';
         
         $mail->Body    = "
-            <h2>Halo, {$nama}!</h2>
-            <p>Terima kasih telah mendaftar sebagai anggota Persekutuan Doa Kisel (PDKISEL).</p>
-            <p>Data Anda telah berhasil kami terima dan simpan di sistem kami.</p>
-            <br>
-            <p>Mari bertumbuh bersama dalam persekutuan yang saling menguatkan.</p>
-            <br>
-            <p>Tuhan memberkati,</p>
-            <p><b>Pengurus PDKISEL</b></p>
+            <div style='font-family: Arial, sans-serif; color: #333;'>
+                <h2 style='color: #0A1F44;'>Halo, {$nama}!</h2>
+                <p>Terima kasih telah mendaftar sebagai anggota Persekutuan Doa Kisel (PDKISEL).</p>
+                <p>Data Anda telah berhasil kami terima dan simpan di sistem kami.</p>
+                <br>
+                <p>Mari bertumbuh bersama dalam persekutuan yang saling menguatkan.</p>
+                <br>
+                <p>Tuhan memberkati,</p>
+                <p><b>Pengurus PDKISEL</b></p>
+            </div>
         ";
 
         $mail->send();
