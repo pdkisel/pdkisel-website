@@ -1,5 +1,5 @@
 <?php
-// Panggil file koneksi
+// Panggil file koneksi database
 require 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -39,31 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         
-        // --- FITUR EMAIL NOTIFIKASI ---
-        $to = $email;
-        $subject = "Pendaftaran Anggota PDKISEL Berhasil";
-        
-        $message = "Halo " . $nama . ",\n\n";
-        $message .= "Terima kasih telah mendaftar sebagai anggota Persekutuan Doa Kisel (PDKISEL).\n";
-        $message .= "Data Anda telah berhasil kami terima dan simpan.\n\n";
-        $message .= "Mari bertumbuh bersama dalam persekutuan yang saling menguatkan.\n\n";
-        $message .= "Tuhan memberkati,\nPengurus PDKISEL";
-
-        $headers = "From: no-reply@pdkisel.id" . "\r\n" .
-                   "Reply-To: halo@pdkisel.id" . "\r\n" .
-                   "X-Mailer: PHP/" . phpversion();
-
-        // Kirim email (Fungsi mail bawaan Hostinger)
-        mail($to, $subject, $message, $headers);
-
-        // --- SELESAI EMAIL ---
-
         // Tampilkan pesan sukses dan redirect
         echo "<script>
-                alert('Pendaftaran Berhasil! Silakan cek email Anda untuk konfirmasi.');
+                alert('Pendaftaran Berhasil! Data Anda telah kami simpan.');
                 window.location.href = 'index.html';
               </script>";
     } else {
+        // Jika gagal simpan ke database
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
