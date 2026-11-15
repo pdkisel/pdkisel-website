@@ -19,6 +19,35 @@
     
     <!-- Link ke CSS KHUSUS VISI & MISI -->
     <link rel="stylesheet" href="assets/css/visi-misi.css">
+
+    <style>
+        /* CSS Khusus untuk Tombol WhatsApp agar rapi */
+        .btn-wa-custom {
+            background-color: #25D366; /* Warna Khas WhatsApp */
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            margin-bottom: 15px;
+        }
+        .btn-wa-custom:hover {
+            background-color: #128C7E; /* Warna Hijau Gelap saat Hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+        .btn-wa-custom i {
+            font-size: 1.3rem;
+            color: #FFFFFF;
+        }
+    </style>
 </head>
 <body>
 
@@ -196,12 +225,15 @@
                 <h2>Rindu Bertumbuh Bersama Kami?</h2>
                 <p>Kami membuka pintu selebar-lebarnya bagi Anda yang ingin menemukan komunitas rohani yang hangat dan saling menguatkan. Mari bertumbuh bersama, jadilah bagian dari keluarga besar PDKISEL.</p>
                 <div class="contact-info">
-                    <p><i class="fas fa-envelope"></i> halo@pdkisel.org <em>(placeholder)</em></p>
-                    <p style="margin-bottom: 15px;">
-                        <a href="https://wa.me/6282195277708" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 0.9rem;">
-                            <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> Hubungi via WhatsApp
+                    <p><i class="fas fa-envelope"></i> halo@pdkisel.id</p>
+                    
+                    <!-- TOMBOL WHATSAPP BARU -->
+                    <p>
+                        <a href="https://wa.me/6282195277708" target="_blank" class="btn-wa-custom">
+                            <i class="fab fa-whatsapp"></i> Hubungi via WhatsApp
                         </a>
                     </p>
+
                     <p><i class="fas fa-map-marker-alt"></i> Indonesia</p>
                 </div>
             </div>
