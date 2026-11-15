@@ -244,5 +244,14 @@ $result = $conn->query($sql);
         }
     </script>
 
+    <!-- SCRIPT ANTI-TOMBOL BACK (Mencegah masuk dashboard via cache) -->
+    <script>
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function() {
+            window.history.pushState(null, "", window.location.href);
+            window.location.href = 'login.php'; // Paksa kembali ke login
+        };
+    </script>
+
 </body>
 </html>
