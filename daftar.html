@@ -34,8 +34,8 @@
             <p>Mari bertumbuh bersama dalam persekutuan yang saling menguatkan.</p>
         </div>
 
-        <!-- Form Start (Mengarah ke proses_daftar.php) -->
-        <form id="registrationForm" action="proses_daftar.php" method="POST">
+        <!-- Form Start (PENTING: enctype="multipart/form-data" wajib untuk upload file) -->
+        <form id="registrationForm" action="proses_daftar.php" method="POST" enctype="multipart/form-data">
             
             <!-- SEGMEN 1: IDENTITAS DIRI -->
             <div class="form-section">
@@ -61,6 +61,13 @@
                 <div class="form-group">
                     <label for="alamat">Alamat Domisili <span class="required">*</span></label>
                     <textarea id="alamat" name="alamat" rows="3" placeholder="Jl. Contoh No. 123, Kota, Provinsi..." required></textarea>
+                </div>
+
+                <!-- INPUT FOTO BARU -->
+                <div class="form-group">
+                    <label for="foto">Foto Profil (Maks. 1MB) <span class="required">*</span></label>
+                    <input type="file" id="foto" name="foto" accept="image/jpeg, image/png, image/jpg" required style="padding: 10px; background: #fff;">
+                    <small class="hint">Format: JPG, JPEG, atau PNG. Ukuran maksimal 1MB.</small>
                 </div>
 
                 <div class="form-row">
