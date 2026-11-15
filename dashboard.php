@@ -78,6 +78,7 @@ $result = $conn->query($sql);
             background-color: #FFFFFF;
             border-bottom: 1px solid #E2E8F0;
             flex-wrap: wrap;
+            align-items: center;
         }
         .filter-group {
             display: flex;
@@ -101,6 +102,24 @@ $result = $conn->query($sql);
             width: 100%;
         }
         .filter-group select { cursor: pointer; }
+
+        /* Tombol Aksi Filter */
+        .btn-filter-action {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-terapkan { background-color: #0A1F44; color: #FFFFFF; }
+        .btn-terapkan:hover { background-color: #D32F2F; }
+        .btn-reset { background-color: #E2E8F0; color: #4A5568; }
+        .btn-reset:hover { background-color: #CBD5E0; }
 
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #E2E8F0; font-size: 0.9rem; vertical-align: middle; }
@@ -148,6 +167,13 @@ $result = $conn->query($sql);
 
         /* Efek Sembunyi/Tampil Baris Tabel */
         .hidden-row { display: none !important; }
+
+        /* Responsif Mobile */
+        @media (max-width: 768px) {
+            .filter-toolbar { flex-direction: column; align-items: stretch; }
+            .filter-group { width: 100%; }
+            .btn-filter-action { justify-content: center; width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -227,11 +253,11 @@ $result = $conn->query($sql);
             <div class="filter-toolbar">
                 <div class="filter-group">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Cari nama atau email..." onkeyup="terapkanFilter()">
+                    <input type="text" id="searchInput" placeholder="Cari nama atau email..." onkeyup="if(event.key === 'Enter') terapkanFilter()">
                 </div>
                 <div class="filter-group">
                     <i class="fas fa-briefcase"></i>
-                    <select id="filterStatus" onchange="terapkanFilter()">
+                    <select id="filterStatus">
                         <option value="">Semua Status Karyawan</option>
                         <option value="Tetap">Tetap</option>
                         <option value="Kontrak PKWT">Kontrak PKWT</option>
@@ -240,7 +266,7 @@ $result = $conn->query($sql);
                 </div>
                 <div class="filter-group">
                     <i class="fas fa-map-marker-alt"></i>
-                    <select id="filterRegional" onchange="terapkanFilter()">
+                    <select id="filterRegional">
                         <option value="">Semua Regional</option>
                         <option value="Kantor Pusat">Kantor Pusat</option>
                         <option value="Regional Sumbagut">Regional Sumbagut</option>
@@ -255,6 +281,10 @@ $result = $conn->query($sql);
                         <option value="Puma">Puma</option>
                     </select>
                 </div>
+                
+                <!-- Tombol Aksi -->
+                <button class="btn-filter-action btn-terapkan" onclick="terapkanFilter()"><i class="fas fa-filter"></i> Terapkan</button>
+                <button class="btn-filter-action btn-reset" onclick="resetFilter()"><i class="fas fa-sync-alt"></i> Reset</button>
             </div>
 
             <table id="dataTable">
@@ -369,13 +399,13 @@ $result = $conn->query($sql);
             }
         }
 
-        // 2. Fungsi Filter Terpadu (Infografis + Toolbar)
+        // 2. Fungsi Filter Terpadu
         function terapkanFilter() {
             var searchText = document.getElementById('searchInput').value.toLowerCase();
             var filterStatus = document.getElementById('filterStatus').value;
             var filterRegional = document.getElementById('filterRegional').value;
             
-            // Ambil nilai filter dari Infografis jika ada (disimpan di variabel global)
+            // Ambil nilai filter dari Infografis jika ada
             var infoKategori = window.currentInfoKategori || 'all';
             var infoNilai = window.currentInfoNilai || '';
 
@@ -418,27 +448,42 @@ $result = $conn->query($sql);
             window.currentInfoKategori = kategori;
             window.currentInfoNilai = nilai;
 
-            // Jika klik Total Anggota, reset semua filter infografis
-            if (kategori === 'all') {
-                window.currentInfoKategori = 'all';
-                window.currentInfoNilai = '';
-            }
-
-            // Sinkronkan Dropdown Toolbar agar sesuai dengan klik
+            // Sinkronkan Dropdown Toolbar
             if (kategori === 'status_karyawan') {
                 document.getElementById('filterStatus').value = nilai;
-            } else {
-                document.getElementById('filterStatus').value = '';
-            }
-
-            if (kategori === 'regional') {
+                document.getElementById('filterRegional').value = '';
+            } else if (kategori === 'regional') {
                 document.getElementById('filterRegional').value = nilai;
+                document.getElementById('filterStatus').value = '';
             } else {
+                // Jika klik 'all' (total)
+                document.getElementById('filterStatus').value = '';
                 document.getElementById('filterRegional').value = '';
             }
 
+            // Kosongkan pencarian saat klik infografis
+            document.getElementById('searchInput').value = '';
+
             // Panggil fungsi filter terpadu
             terapkanFilter();
+        }
+
+        // 4. Fungsi Reset Filter
+        function resetFilter() {
+            // Kosongkan input
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterRegional').value = '';
+            
+            // Reset state infografis
+            window.currentInfoKategori = 'all';
+            window.currentInfoNilai = '';
+
+            // Tampilkan semua baris
+            var rows = document.querySelectorAll('.data-row');
+            rows.forEach(function(row) {
+                row.classList.remove('hidden-row');
+            });
         }
     </script>
 </body>
