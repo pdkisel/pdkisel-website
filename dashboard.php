@@ -112,7 +112,7 @@ $result = $conn->query($sql);
         }
         .detail-row td {
             padding: 0;
-            border-bottom: 2px solid #0A1F44; /* Garis pemisah tebal di akhir */
+            border-bottom: 2px solid #0A1F44;
         }
         .detail-wrapper {
             padding: 30px;
@@ -140,9 +140,16 @@ $result = $conn->query($sql);
 
         .detail-grid {
             display: grid;
+            grid-template-columns: 2fr 1fr; /* Kolom kiri lebih lebar untuk teks, kanan untuk foto */
+            gap: 20px;
+        }
+
+        .detail-text-area {
+            display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px 30px;
         }
+
         .detail-item {
             margin-bottom: 5px;
         }
@@ -161,6 +168,22 @@ $result = $conn->query($sql);
         }
         .full-width {
             grid-column: 1 / -1;
+        }
+
+        /* === STYLES UNTUK FOTO PROFIL === */
+        .profile-photo-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10px;
+        }
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%; /* Membuat foto bulat elegan */
+            border: 4px solid #FFFFFF;
+            box-shadow: 0 4px 15px rgba(10, 31, 44, 0.15);
         }
     </style>
 </head>
@@ -211,26 +234,40 @@ $result = $conn->query($sql);
                             echo "<td colspan='7'>"; 
                             echo "<div class='detail-wrapper'>";
                             
-                            // --- SEKSI 1: IDENTITAS ---
+                            // --- SEKSI 1: IDENTITAS (DENGAN FOTO DI KANAN) ---
                             echo "<div class='detail-section-title'><i class='fas fa-user-circle'></i> Identitas Diri</div>";
-                            echo "<div class='detail-grid'>";
+                            echo "<div class='detail-grid'>"; // Grid Utama (Kiri Teks, Kanan Foto)
+                            
+                            // Area Kiri (Teks)
+                            echo "<div class='detail-text-area'>";
                             echo "<div class='detail-item'><span class='detail-label'>Nama Lengkap</span><span class='detail-value'>" . htmlspecialchars($row['nama']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Email</span><span class='detail-value'>" . htmlspecialchars($row['email']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>No HP / WA</span><span class='detail-value'>" . htmlspecialchars($row['no_hp']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Jenis Kelamin</span><span class='detail-value'>" . htmlspecialchars($row['jenis_kelamin']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Tanggal Lahir</span><span class='detail-value'>" . date('d F Y', strtotime($row['tanggal_lahir'])) . "</span></div>";
                             echo "<div class='detail-item full-width'><span class='detail-label'>Alamat Domisili</span><span class='detail-value'>" . htmlspecialchars($row['alamat']) . "</span></div>";
-                            echo "</div>";
+                            echo "</div>"; // End Text Area
+
+                            // Area Kanan (Foto)
+                            echo "<div class='profile-photo-container'>";
+                            if (!empty($row['foto']) && file_exists('uploads/' . $row['foto'])) {
+                                echo "<img src='uploads/" . htmlspecialchars($row['foto']) . "' alt='Foto Profil' class='profile-photo'>";
+                            } else {
+                                // Placeholder jika tidak ada foto
+                                echo "<div style='width:150px; height:150px; border-radius:50%; background:#E2E8F0; display:flex; justify-content:center; align-items:center; color:#A0AEC0; border: 4px solid #FFF;'><i class='fas fa-user fa-3x'></i></div>";
+                            }
+                            echo "</div>"; // End Photo Container
+
+                            echo "</div>"; // End Detail Grid Utama
 
                             // --- SEKSI 2: PEKERJAAN ---
                             echo "<div class='detail-section-title'><i class='fas fa-briefcase'></i> Data Pekerjaan</div>";
-                            echo "<div class='detail-grid'>";
+                            echo "<div class='detail-text-area' style='grid-template-columns: 1fr 1fr;'>";
                             echo "<div class='detail-item'><span class='detail-label'>Status Karyawan</span><span class='detail-value'>" . htmlspecialchars($row['status_karyawan']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Anak Usaha</span><span class='detail-value'>" . htmlspecialchars($row['anak_usaha']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Regional</span><span class='detail-value'>" . htmlspecialchars($row['regional']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Lokasi Kantor</span><span class='detail-value'>" . htmlspecialchars($row['lokasi_kantor'] ?? '-') . "</span></div>";
                             
-                            // Logika Masa Kontrak
                             $kontrak = "Tidak ada (Karyawan Tetap)";
                             if (!empty($row['kontrak_mulai']) && !empty($row['kontrak_selesai'])) {
                                 $kontrak = date('d M Y', strtotime($row['kontrak_mulai'])) . " s/d " . date('d M Y', strtotime($row['kontrak_selesai']));
@@ -240,7 +277,7 @@ $result = $conn->query($sql);
 
                             // --- SEKSI 3: KELUARGA & GEREJA ---
                             echo "<div class='detail-section-title'><i class='fas fa-heart'></i> Keluarga & Gereja</div>";
-                            echo "<div class='detail-grid'>";
+                            echo "<div class='detail-text-area' style='grid-template-columns: 1fr 1fr;'>";
                             echo "<div class='detail-item'><span class='detail-label'>Status Pernikahan</span><span class='detail-value'>" . htmlspecialchars($row['status_pernikahan']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Jumlah Anak</span><span class='detail-value'>" . htmlspecialchars($row['jumlah_anak']) . "</span></div>";
                             echo "<div class='detail-item full-width'><span class='detail-label'>Gereja / Jemaat</span><span class='detail-value'>" . htmlspecialchars($row['gereja']) . "</span></div>";
