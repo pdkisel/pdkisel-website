@@ -1,4 +1,9 @@
 <?php
+// Mencegah browser menyimpan halaman di cache (Anti tombol Back)
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 session_start();
 
 // Proteksi Halaman: Jika belum login, tendang ke halaman login
@@ -61,7 +66,7 @@ $result = $conn->query($sql);
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            overflow: hidden; /* Penting agar border-radius tetap rapi */
+            overflow: hidden;
         }
         table {
             width: 100%;
@@ -97,16 +102,16 @@ $result = $conn->query($sql);
             background-color: #D32F2F;
         }
         .btn-detail.active {
-            background-color: #D32F2F; /* Warna tombol berubah saat terbuka */
+            background-color: #D32F2F;
         }
 
         /* === STYLES UNTUK BARIS DETAIL (ACCORDION) === */
         .detail-row {
-            display: none; /* Sembunyikan secara default */
+            display: none;
             background-color: #F8FAFC;
         }
         .detail-row td {
-            padding: 0; /* Hapus padding sel tabel standar */
+            padding: 0;
             border-bottom: 2px solid #E2E8F0;
         }
         .detail-container {
@@ -185,7 +190,7 @@ $result = $conn->query($sql);
 
                             // BARIS DETAIL (Tersembunyi di bawahnya)
                             echo "<tr id='detail-row-".$id_row."' class='detail-row'>";
-                            echo "<td colspan='7'>"; // Colspan agar menutupi seluruh lebar tabel
+                            echo "<td colspan='7'>"; 
                             echo "<div class='detail-container'>";
                             
                             echo "<div class='detail-item'><span class='detail-label'>Nama Lengkap</span><span class='detail-value'>" . htmlspecialchars($row['nama']) . "</span></div>";
@@ -209,7 +214,7 @@ $result = $conn->query($sql);
                             echo "<div class='detail-item full-width'><span class='detail-label'>Alamat Domisili</span><span class='detail-value'>" . htmlspecialchars($row['alamat']) . "</span></div>";
                             echo "<div class='detail-item full-width'><span class='detail-label'>Waktu Pendaftaran</span><span class='detail-value'>" . date('d F Y, H:i', strtotime($row['waktu_daftar'])) . " WIB</span></div>";
 
-                            echo "</div>"; // End detail-container
+                            echo "</div>"; 
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -228,12 +233,10 @@ $result = $conn->query($sql);
             var detailRow = document.getElementById('detail-row-' + id);
             
             if (detailRow.style.display === 'table-row') {
-                // Tutup
                 detailRow.style.display = 'none';
                 btn.innerHTML = '<i class="fas fa-chevron-down"></i> Detail';
                 btn.classList.remove('active');
             } else {
-                // Buka
                 detailRow.style.display = 'table-row';
                 btn.innerHTML = '<i class="fas fa-chevron-up"></i> Tutup';
                 btn.classList.add('active');
