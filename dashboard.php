@@ -61,12 +61,11 @@ $result = $conn->query($sql);
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            overflow-x: auto;
+            overflow: hidden; /* Penting agar border-radius tetap rapi */
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
         }
         th, td {
             padding: 15px;
@@ -97,71 +96,48 @@ $result = $conn->query($sql);
         .btn-detail:hover {
             background-color: #D32F2F;
         }
+        .btn-detail.active {
+            background-color: #D32F2F; /* Warna tombol berubah saat terbuka */
+        }
 
-        /* === MODAL STYLES === */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(10, 31, 68, 0.6); 
-            backdrop-filter: blur(4px);
-            align-items: center;
-            justify-content: center;
+        /* === STYLES UNTUK BARIS DETAIL (ACCORDION) === */
+        .detail-row {
+            display: none; /* Sembunyikan secara default */
+            background-color: #F8FAFC;
         }
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 600px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #718096;
-            cursor: pointer;
-        }
-        .close-btn:hover {
-            color: #D32F2F;
-        }
-        .modal-title {
-            font-family: 'Poppins', sans-serif;
-            color: #0A1F44;
-            margin-top: 0;
-            margin-bottom: 20px;
+        .detail-row td {
+            padding: 0; /* Hapus padding sel tabel standar */
             border-bottom: 2px solid #E2E8F0;
-            padding-bottom: 10px;
         }
-        .detail-grid {
+        .detail-container {
+            padding: 20px 30px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .detail-item {
             margin-bottom: 10px;
         }
         .detail-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #718096;
             font-weight: 600;
             text-transform: uppercase;
             display: block;
+            margin-bottom: 2px;
         }
         .detail-value {
             font-size: 0.95rem;
             color: #2D3748;
             font-weight: 500;
+        }
+        .full-width {
+            grid-column: 1 / -1;
         }
     </style>
 </head>
@@ -194,9 +170,9 @@ $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         $no = 1;
                         while($row = $result->fetch_assoc()) {
-                            // Menyiapkan data dalam format JSON untuk dilempar ke Modal
-                            $jsonData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
+                            $id_row = $row['id'];
                             
+                            // BARIS UTAMA TABEL
                             echo "<tr>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td><strong>" . htmlspecialchars($row['nama']) . "</strong><br><small style='color:#718096;'>" . htmlspecialchars($row['email']) . "</small></td>";
@@ -204,7 +180,37 @@ $result = $conn->query($sql);
                             echo "<td>" . htmlspecialchars($row['status_karyawan']) . "<br><small style='color:#718096;'>" . htmlspecialchars($row['anak_usaha']) . "</small></td>";
                             echo "<td>" . htmlspecialchars($row['regional']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['gereja']) . "</td>";
-                            echo "<td><button class='btn-detail' onclick='bukaModal(" . $jsonData . ")'><i class='fas fa-eye'></i> Detail</button></td>";
+                            echo "<td><button class='btn-detail' onclick='toggleDetail(".$id_row.", this)'><i class='fas fa-chevron-down'></i> Detail</button></td>";
+                            echo "</tr>";
+
+                            // BARIS DETAIL (Tersembunyi di bawahnya)
+                            echo "<tr id='detail-row-".$id_row."' class='detail-row'>";
+                            echo "<td colspan='7'>"; // Colspan agar menutupi seluruh lebar tabel
+                            echo "<div class='detail-container'>";
+                            
+                            echo "<div class='detail-item'><span class='detail-label'>Nama Lengkap</span><span class='detail-value'>" . htmlspecialchars($row['nama']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Email</span><span class='detail-value'>" . htmlspecialchars($row['email']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>No HP / WA</span><span class='detail-value'>" . htmlspecialchars($row['no_hp']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Jenis Kelamin</span><span class='detail-value'>" . htmlspecialchars($row['jenis_kelamin']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Tanggal Lahir</span><span class='detail-value'>" . date('d F Y', strtotime($row['tanggal_lahir'])) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Status Pernikahan</span><span class='detail-value'>" . htmlspecialchars($row['status_pernikahan']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Jumlah Anak</span><span class='detail-value'>" . htmlspecialchars($row['jumlah_anak']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Gereja</span><span class='detail-value'>" . htmlspecialchars($row['gereja']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Anak Usaha</span><span class='detail-value'>" . htmlspecialchars($row['anak_usaha']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Lokasi Kantor</span><span class='detail-value'>" . htmlspecialchars($row['lokasi_kantor'] ?? '-') . "</span></div>";
+                            
+                            // Logika Masa Kontrak
+                            $kontrak = "Tidak ada (Karyawan Tetap)";
+                            if (!empty($row['kontrak_mulai']) && !empty($row['kontrak_selesai'])) {
+                                $kontrak = date('d M Y', strtotime($row['kontrak_mulai'])) . " s/d " . date('d M Y', strtotime($row['kontrak_selesai']));
+                            }
+                            echo "<div class='detail-item full-width'><span class='detail-label'>Masa Kontrak</span><span class='detail-value'>" . $kontrak . "</span></div>";
+                            
+                            echo "<div class='detail-item full-width'><span class='detail-label'>Alamat Domisili</span><span class='detail-value'>" . htmlspecialchars($row['alamat']) . "</span></div>";
+                            echo "<div class='detail-item full-width'><span class='detail-label'>Waktu Pendaftaran</span><span class='detail-value'>" . date('d F Y, H:i', strtotime($row['waktu_daftar'])) . " WIB</span></div>";
+
+                            echo "</div>"; // End detail-container
+                            echo "</td>";
                             echo "</tr>";
                         }
                     } else {
@@ -216,110 +222,21 @@ $result = $conn->query($sql);
         </div>
     </div>
 
-    <!-- MODAL POP-UP UNTUK DETAIL -->
-    <div id="detailModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="tutupModal()">&times;</span>
-            <h2 class="modal-title">Detail Anggota</h2>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <span class="detail-label">Nama Lengkap</span>
-                    <span class="detail-value" id="m_nama">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Email</span>
-                    <span class="detail-value" id="m_email">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">No HP / WA</span>
-                    <span class="detail-value" id="m_hp">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Jenis Kelamin</span>
-                    <span class="detail-value" id="m_jk">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Tanggal Lahir</span>
-                    <span class="detail-value" id="m_lahir">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Status Pernikahan</span>
-                    <span class="detail-value" id="m_nikah">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Jumlah Anak</span>
-                    <span class="detail-value" id="m_anak">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Gereja</span>
-                    <span class="detail-value" id="m_gereja">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Status Karyawan</span>
-                    <span class="detail-value" id="m_status">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Anak Usaha</span>
-                    <span class="detail-value" id="m_usaha">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Regional</span>
-                    <span class="detail-value" id="m_regional">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Lokasi Kantor</span>
-                    <span class="detail-value" id="m_kantor">-</span>
-                </div>
-                <div class="detail-item" style="grid-column: 1 / -1;">
-                    <span class="detail-label">Masa Kontrak</span>
-                    <span class="detail-value" id="m_kontrak">-</span>
-                </div>
-                <div class="detail-item" style="grid-column: 1 / -1;">
-                    <span class="detail-label">Alamat Domisili</span>
-                    <span class="detail-value" id="m_alamat">-</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT UNTUK MODAL -->
+    <!-- JAVASCRIPT UNTUK TOGGLE DETAIL -->
     <script>
-        function bukaModal(data) {
-            // Mengisi data ke dalam elemen HTML di Modal
-            document.getElementById('m_nama').innerText = data.nama || '-';
-            document.getElementById('m_email').innerText = data.email || '-';
-            document.getElementById('m_hp').innerText = data.no_hp || '-';
-            document.getElementById('m_jk').innerText = data.jenis_kelamin || '-';
-            document.getElementById('m_lahir').innerText = data.tanggal_lahir || '-';
-            document.getElementById('m_nikah').innerText = data.status_pernikahan || '-';
-            document.getElementById('m_anak').innerText = data.jumlah_anak || '0';
-            document.getElementById('m_gereja').innerText = data.gereja || '-';
-            document.getElementById('m_status').innerText = data.status_karyawan || '-';
-            document.getElementById('m_usaha').innerText = data.anak_usaha || '-';
-            document.getElementById('m_regional').innerText = data.regional || '-';
-            document.getElementById('m_kantor').innerText = data.lokasi_kantor || '-';
-            document.getElementById('m_alamat').innerText = data.alamat || '-';
+        function toggleDetail(id, btn) {
+            var detailRow = document.getElementById('detail-row-' + id);
             
-            // Logika Masa Kontrak
-            if (data.kontrak_mulai && data.kontrak_selesai) {
-                document.getElementById('m_kontrak').innerText = data.kontrak_mulai + ' s/d ' + data.kontrak_selesai;
+            if (detailRow.style.display === 'table-row') {
+                // Tutup
+                detailRow.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-chevron-down"></i> Detail';
+                btn.classList.remove('active');
             } else {
-                document.getElementById('m_kontrak').innerText = 'Tidak ada (Karyawan Tetap)';
-            }
-
-            // Tampilkan Modal
-            document.getElementById('detailModal').style.display = 'flex';
-        }
-
-        function tutupModal() {
-            document.getElementById('detailModal').style.display = 'none';
-        }
-
-        // Menutup modal jika area luar diklik
-        window.onclick = function(event) {
-            var modal = document.getElementById('detailModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
+                // Buka
+                detailRow.style.display = 'table-row';
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> Tutup';
+                btn.classList.add('active');
             }
         }
     </script>
