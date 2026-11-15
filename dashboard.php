@@ -69,6 +69,39 @@ $result = $conn->query($sql);
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         
         .card { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 20px; }
+        
+        /* === TOOLBAR FILTER === */
+        .filter-toolbar {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 8px 15px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .filter-group i { color: #A0AEC0; }
+        .filter-group input, .filter-group select {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #2D3748;
+            width: 100%;
+        }
+        .filter-group select { cursor: pointer; }
+
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #E2E8F0; font-size: 0.9rem; vertical-align: middle; }
         th { background-color: #F8FAFC; color: #0A1F44; font-weight: 600; font-family: 'Poppins', sans-serif; }
@@ -131,18 +164,18 @@ $result = $conn->query($sql);
         
         <!-- INFOGRAFIS -->
         <div class="infografis-grid">
-            <!-- Card 1: Status Karyawan -->
+            <!-- Card 1 -->
             <div class="info-card">
                 <h3 class="info-card-title"><i class="fas fa-users"></i> Ringkasan Anggota</h3>
                 <ul class="info-list">
-                    <li onclick="filterTable('all')"><span>Total Anggota Terdaftar</span> <span class="info-number" style="background:#0A1F44; color:white;"><?php echo $total_anggota; ?></span></li>
-                    <li onclick="filterTable('status_karyawan', 'Tetap')"><span>Karyawan Tetap</span> <span class="info-number"><?php echo isset($status_counts['Tetap']) ? $status_counts['Tetap'] : 0; ?></span></li>
-                    <li onclick="filterTable('status_karyawan', 'Kontrak PKWT')"><span>Kontrak PKWT</span> <span class="info-number"><?php echo isset($status_counts['Kontrak PKWT']) ? $status_counts['Kontrak PKWT'] : 0; ?></span></li>
-                    <li onclick="filterTable('status_karyawan', 'Kontrak Project')"><span>Kontrak Project</span> <span class="info-number"><?php echo isset($status_counts['Kontrak Project']) ? $status_counts['Kontrak Project'] : 0; ?></span></li>
+                    <li onclick="filterInfografis('all', null)"><span>Total Anggota Terdaftar</span> <span class="info-number" style="background:#0A1F44; color:white;"><?php echo $total_anggota; ?></span></li>
+                    <li onclick="filterInfografis('status_karyawan', 'Tetap')"><span>Karyawan Tetap</span> <span class="info-number"><?php echo isset($status_counts['Tetap']) ? $status_counts['Tetap'] : 0; ?></span></li>
+                    <li onclick="filterInfografis('status_karyawan', 'Kontrak PKWT')"><span>Kontrak PKWT</span> <span class="info-number"><?php echo isset($status_counts['Kontrak PKWT']) ? $status_counts['Kontrak PKWT'] : 0; ?></span></li>
+                    <li onclick="filterInfografis('status_karyawan', 'Kontrak Project')"><span>Kontrak Project</span> <span class="info-number"><?php echo isset($status_counts['Kontrak Project']) ? $status_counts['Kontrak Project'] : 0; ?></span></li>
                 </ul>
             </div>
 
-            <!-- Card 2: Anak Usaha -->
+            <!-- Card 2 -->
             <div class="info-card">
                 <h3 class="info-card-title"><i class="fas fa-building"></i> Sebaran Anak Usaha</h3>
                 <ul class="info-list">
@@ -150,13 +183,13 @@ $result = $conn->query($sql);
                     $daftar_usaha = ['Holding Kisel', 'PT. KSP', 'PT. KUT', 'PT. KAM', 'PT. KSS'];
                     foreach($daftar_usaha as $usaha) {
                         $jml = isset($usaha_counts[$usaha]) ? $usaha_counts[$usaha] : 0;
-                        echo "<li onclick=\"filterTable('anak_usaha', '{$usaha}')\"><span>{$usaha}</span> <span class='info-number'>{$jml}</span></li>";
+                        echo "<li onclick=\"filterInfografis('anak_usaha', '{$usaha}')\"><span>{$usaha}</span> <span class='info-number'>{$jml}</span></li>";
                     }
                     ?>
                 </ul>
             </div>
 
-            <!-- Card 3: Regional -->
+            <!-- Card 3 -->
             <div class="info-card">
                 <h3 class="info-card-title"><i class="fas fa-map-marker-alt"></i> Sebaran Regional</h3>
                 <ul class="info-list" style="max-height: 200px; overflow-y: auto;">
@@ -164,7 +197,7 @@ $result = $conn->query($sql);
                     $daftar_regional = ['Kantor Pusat', 'Regional Sumbagut', 'Regional Sumbagteng', 'Regional Sumbagsel', 'Jabotabek & Jabar', 'Jawa Tengah', 'Jawa Timur', 'Balinusra', 'Kalimantan', 'Sulawesi', 'Puma'];
                     foreach($daftar_regional as $reg) {
                         $jml = isset($regional_counts[$reg]) ? $regional_counts[$reg] : 0;
-                        echo "<li onclick=\"filterTable('regional', '{$reg}')\"><span>{$reg}</span> <span class='info-number'>{$jml}</span></li>";
+                        echo "<li onclick=\"filterInfografis('regional', '{$reg}')\"><span>{$reg}</span> <span class='info-number'>{$jml}</span></li>";
                     }
                     ?>
                 </ul>
@@ -188,8 +221,42 @@ $result = $conn->query($sql);
             <?php endif; ?>
         </div>
 
-        <!-- TABEL DATA -->
+        <!-- TABEL DATA DENGAN FILTER TOOLBAR -->
         <div class="card">
+            <!-- Toolbar Pencarian & Filter -->
+            <div class="filter-toolbar">
+                <div class="filter-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari nama atau email..." onkeyup="terapkanFilter()">
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-briefcase"></i>
+                    <select id="filterStatus" onchange="terapkanFilter()">
+                        <option value="">Semua Status Karyawan</option>
+                        <option value="Tetap">Tetap</option>
+                        <option value="Kontrak PKWT">Kontrak PKWT</option>
+                        <option value="Kontrak Project">Kontrak Project</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select id="filterRegional" onchange="terapkanFilter()">
+                        <option value="">Semua Regional</option>
+                        <option value="Kantor Pusat">Kantor Pusat</option>
+                        <option value="Regional Sumbagut">Regional Sumbagut</option>
+                        <option value="Regional Sumbagteng">Regional Sumbagteng</option>
+                        <option value="Regional Sumbagsel">Regional Sumbagsel</option>
+                        <option value="Jabotabek & Jabar">Jabotabek & Jabar</option>
+                        <option value="Jawa Tengah">Jawa Tengah</option>
+                        <option value="Jawa Timur">Jawa Timur</option>
+                        <option value="Balinusra">Balinusra</option>
+                        <option value="Kalimantan">Kalimantan</option>
+                        <option value="Sulawesi">Sulawesi</option>
+                        <option value="Puma">Puma</option>
+                    </select>
+                </div>
+            </div>
+
             <table id="dataTable">
                 <thead>
                     <tr>
@@ -211,8 +278,9 @@ $result = $conn->query($sql);
                             $status = htmlspecialchars($row['status_karyawan']);
                             $usaha = htmlspecialchars($row['anak_usaha']);
                             $reg = htmlspecialchars($row['regional']);
+                            $nama_email = htmlspecialchars($row['nama']) . ' ' . htmlspecialchars($row['email']);
                             
-                            echo "<tr class='data-row' data-status='{$status}' data-usaha='{$usaha}' data-regional='{$reg}'>";
+                            echo "<tr class='data-row' data-status='{$status}' data-usaha='{$usaha}' data-regional='{$reg}' data-search='" . strtolower($nama_email) . "'>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td><strong>" . htmlspecialchars($row['nama']) . "</strong><br><small style='color:#718096;'>" . htmlspecialchars($row['email']) . "</small></td>";
                             echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";
@@ -301,35 +369,76 @@ $result = $conn->query($sql);
             }
         }
 
-        // 2. Fungsi Filter Tabel Berdasarkan Kartu yang Diklik
-        function filterTable(kategori, nilai = null) {
+        // 2. Fungsi Filter Terpadu (Infografis + Toolbar)
+        function terapkanFilter() {
+            var searchText = document.getElementById('searchInput').value.toLowerCase();
+            var filterStatus = document.getElementById('filterStatus').value;
+            var filterRegional = document.getElementById('filterRegional').value;
+            
+            // Ambil nilai filter dari Infografis jika ada (disimpan di variabel global)
+            var infoKategori = window.currentInfoKategori || 'all';
+            var infoNilai = window.currentInfoNilai || '';
+
             var rows = document.querySelectorAll('.data-row');
             
-            // Jika klik "Total Anggota", tampilkan semua
-            if (kategori === 'all') {
-                rows.forEach(function(row) {
-                    row.classList.remove('hidden-row');
-                });
-                return;
-            }
-
-            // Filter berdasarkan kategori
             rows.forEach(function(row) {
-                var status = row.getAttribute('data-status');
-                var usaha = row.getAttribute('data-usaha');
-                var regional = row.getAttribute('data-regional');
-                var match = false;
+                var rowStatus = row.getAttribute('data-status');
+                var rowUsaha = row.getAttribute('data-usaha');
+                var rowRegional = row.getAttribute('data-regional');
+                var rowSearch = row.getAttribute('data-search');
+                
+                var match = true;
 
-                if (kategori === 'status_karyawan' && status === nilai) match = true;
-                if (kategori === 'anak_usaha' && usaha === nilai) match = true;
-                if (kategori === 'regional' && regional === nilai) match = true;
+                // A. Cek Filter Infografis
+                if (infoKategori === 'status_karyawan' && rowStatus !== infoNilai) match = false;
+                if (infoKategori === 'anak_usaha' && rowUsaha !== infoNilai) match = false;
+                if (infoKategori === 'regional' && rowRegional !== infoNilai) match = false;
 
+                // B. Cek Filter Toolbar (Pencarian)
+                if (searchText && !rowSearch.includes(searchText)) match = false;
+
+                // C. Cek Filter Toolbar (Dropdown Status)
+                if (filterStatus && rowStatus !== filterStatus) match = false;
+
+                // D. Cek Filter Toolbar (Dropdown Regional)
+                if (filterRegional && rowRegional !== filterRegional) match = false;
+
+                // Tampilkan/Sembunyikan
                 if (match) {
                     row.classList.remove('hidden-row');
                 } else {
                     row.classList.add('hidden-row');
                 }
             });
+        }
+
+        // 3. Fungsi Klik Infografis
+        function filterInfografis(kategori, nilai) {
+            // Simpan state filter infografis
+            window.currentInfoKategori = kategori;
+            window.currentInfoNilai = nilai;
+
+            // Jika klik Total Anggota, reset semua filter infografis
+            if (kategori === 'all') {
+                window.currentInfoKategori = 'all';
+                window.currentInfoNilai = '';
+            }
+
+            // Sinkronkan Dropdown Toolbar agar sesuai dengan klik
+            if (kategori === 'status_karyawan') {
+                document.getElementById('filterStatus').value = nilai;
+            } else {
+                document.getElementById('filterStatus').value = '';
+            }
+
+            if (kategori === 'regional') {
+                document.getElementById('filterRegional').value = nilai;
+            } else {
+                document.getElementById('filterRegional').value = '';
+            }
+
+            // Panggil fungsi filter terpadu
+            terapkanFilter();
         }
     </script>
 </body>
