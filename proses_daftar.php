@@ -42,13 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         
-        // Panggil fungsi kirim email setelah data berhasil disimpan
+        // Panggil fungsi kirim email
         kirimNotifikasi($email, $nama);
 
-        // Tampilkan pesan sukses dan redirect
+        // Tampilkan pesan sukses dan redirect ke beranda utama
         echo "<script>
                 alert('Pendaftaran Berhasil! Silakan cek email Anda untuk konfirmasi.');
-                window.location.href = 'index.html';
+                window.location.href = '/'; 
               </script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
