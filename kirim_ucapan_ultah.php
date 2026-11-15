@@ -27,9 +27,13 @@ function kirimUcapanUltah($email_tujuan, $nama) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
+        // Pengaturan Pengirim & Penerima
         $mail->setFrom('no-reply@pdkisel.id', 'PDKISEL');
         $mail->addAddress($email_tujuan, $nama);
 
+        // PENTING: Mengatur Charset agar Emoji terbaca
+        $mail->CharSet = 'UTF-8'; 
+        
         $mail->isHTML(true);
         $mail->Subject = 'Selamat Ulang Tahun, ' . $nama . '! 🎉🎂';
         
