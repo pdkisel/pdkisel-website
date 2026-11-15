@@ -19,7 +19,7 @@ function kirimNotifikasi($email_tujuan, $nama) {
         $mail->Username   = 'halo@pdkisel.id'; 
         
         // GANTI dengan password email halo@pdkisel.id Anda
-        $mail->Password   = 'PASSWORD_EMAIL_HALO_ANDA'; 
+        $mail->Password   = '@PdShi3ld2026'; 
         
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
