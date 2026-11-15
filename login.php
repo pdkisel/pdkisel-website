@@ -1,36 +1,79 @@
 <?php
 session_start();
 
-// Jika admin sudah login, langsung arahkan ke dashboard
-if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    header("Location: dashboard.php");
-    exit;
-}
+// Pengaturan Batas Percobaan Login
+$max_attempts = 5; // Maksimal 5 kali gagal
+$lockout_time = 900; // Waktu blokir dalam detik (15 menit)
 
-require 'koneksi.php';
+// Cek apakah IP sedang diblokir
+if (isset($_SESSION['lockout_time']) && (time() - $_SESSION['lockout_time']) < $lockout_time) {
+    $sisa_waktu = ceil(($lockout_time - (time() - $_SESSION['lockout_time'])) / 60);
+    $error = "Terlalu banyak percobaan. Silakan coba lagi dalam " . $sisa_waktu . " menit.";
+} else {
+    // Reset session jika waktu blokir sudah habis
+    if (isset($_SESSION['lockout_time'])) {
+        unset($_SESSION['login_attempts']);
+        unset($_SESSION['lockout_time']);
+    }
 
-$error = '';
+    // Jika admin sudah login, langsung arahkan ke dashboard
+    if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+        header("Location: dashboard.php");
+        exit;
+    }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $conn->real_escape_string($_POST['username']);
-    $password = $_POST['password'];
+    require 'koneksi.php';
 
-    $sql = "SELECT * FROM admin_pdkisel WHERE username = '$username'";
-    $result = $conn->query($sql);
+    $error = '';
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        // Verifikasi password menggunakan password_verify (Bcrypt)
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_username'] = $username;
-            header("Location: dashboard.php");
-            exit;
-        } else {
-            $error = "Password salah. Silakan coba lagi.";
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        // Hitung percobaan gagal
+        if (!isset($_SESSION['login_attempts'])) {
+            $_SESSION['login_attempts'] = 0;
         }
-    } else {
-        $error = "Username tidak ditemukan.";
+
+        // ==========================================
+        // MENGGUNAKAN PREPARED STATEMENTS UNTUK LOGIN
+        // ==========================================
+        $stmt = $conn->prepare("SELECT * FROM admin_pdkisel WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            // Verifikasi password menggunakan password_verify (Bcrypt)
+            if (password_verify($password, $row['password'])) {
+                // Login Berhasil
+                $_SESSION['admin_logged_in'] = true;
+                $_SESSION['admin_username'] = $username;
+                
+                // Reset percobaan gagal
+                $_SESSION['login_attempts'] = 0;
+                
+                header("Location: dashboard.php");
+                exit;
+            } else {
+                // Password Salah
+                $_SESSION['login_attempts']++;
+                $error = "Password salah. Silakan coba lagi. (Percobaan: " . $_SESSION['login_attempts'] . "/" . $max_attempts . ")";
+            }
+        } else {
+            // Username Tidak Ditemukan
+            $_SESSION['login_attempts']++;
+            $error = "Username tidak ditemukan. Silakan coba lagi. (Percobaan: " . $_SESSION['login_attempts'] . "/" . $max_attempts . ")";
+        }
+
+        $stmt->close();
+
+        // Cek jika sudah mencapai batas maksimal
+        if ($_SESSION['login_attempts'] >= $max_attempts) {
+            $_SESSION['lockout_time'] = time();
+            $error = "Terlalu banyak percobaan gagal. Akun diblokir selama 15 menit.";
+        }
     }
 }
 ?>
@@ -123,6 +166,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 0.9rem;
             margin-bottom: 20px;
             text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
     </style>
 </head>
