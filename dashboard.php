@@ -338,6 +338,10 @@ $result = $conn->query($sql);
                             $agama = htmlspecialchars($row['kristen'] ?? '-');
                             $nama_email = htmlspecialchars($row['nama']) . ' ' . htmlspecialchars($row['email']);
                             
+                            // KONVERSI WAKTU KE WIB (TAMBAH 7 JAM DARI UTC)
+                            $waktu_utc = strtotime($row['waktu_daftar']);
+                            $waktu_wib = $waktu_utc + (7 * 3600); // 7 jam * 3600 detik
+                            
                             echo "<tr class='data-row' data-status='{$status}' data-usaha='{$usaha}' data-regional='{$reg}' data-kristen='{$agama}' data-search='" . strtolower($nama_email) . "'>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td><strong>" . htmlspecialchars($row['nama']) . "</strong><br><small style='color:#718096;'>" . htmlspecialchars($row['email']) . "</small></td>";
@@ -346,7 +350,6 @@ $result = $conn->query($sql);
                             echo "<td>" . $reg . "</td>";
                             echo "<td>" . htmlspecialchars($row['gereja']) . "</td>";
                             
-                            // KOLOM AKSI (Detail & Edit)
                             echo "<td>";
                             echo "<div class='action-buttons'>";
                             echo "<button class='btn-detail' onclick='toggleDetail(".$id_row.", this)'><i class='fas fa-chevron-down'></i> Detail</button>";
@@ -404,7 +407,8 @@ $result = $conn->query($sql);
                             echo "</div>";
 
                             echo "<div style='margin-top: 20px; text-align: right; font-size: 0.8rem; color: #A0AEC0;'>";
-                            echo "Terdaftar pada: " . date('d F Y, H:i', strtotime($row['waktu_daftar'])) . " WIB";
+                            // TAMPILKAN WAKTU WIB YANG SUDAH DIKONVERSI
+                            echo "Terdaftar pada: " . date('d F Y, H:i', $waktu_wib) . " WIB";
                             echo "</div>";
 
                             echo "</div>"; 
