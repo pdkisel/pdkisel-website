@@ -92,7 +92,7 @@ $result = $conn->query($sql);
             border-radius: 8px;
             padding: 8px 15px;
             flex: 1;
-            min-width: 200px;
+            min-width: 150px;
         }
         .filter-group i { color: #A0AEC0; }
         .filter-group input, .filter-group select {
@@ -267,16 +267,25 @@ $result = $conn->query($sql);
                 <div class="filter-group">
                     <i class="fas fa-briefcase"></i>
                     <select id="filterStatus">
-                        <option value="">Semua Status Karyawan</option>
+                        <option value="">Status Karyawan</option>
                         <option value="Tetap">Tetap</option>
                         <option value="Kontrak PKWT">Kontrak PKWT</option>
                         <option value="Kontrak Project">Kontrak Project</option>
                     </select>
                 </div>
+                <!-- FILTER KRISTEN BARU -->
+                <div class="filter-group">
+                    <i class="fas fa-cross"></i>
+                    <select id="filterKristen">
+                        <option value="">Denominasi</option>
+                        <option value="Protestan">Protestan</option>
+                        <option value="Katolik">Katolik</option>
+                    </select>
+                </div>
                 <div class="filter-group">
                     <i class="fas fa-map-marker-alt"></i>
                     <select id="filterRegional">
-                        <option value="">Semua Regional</option>
+                        <option value="">Regional</option>
                         <option value="Kantor Pusat">Kantor Pusat</option>
                         <option value="Regional Sumbagut">Regional Sumbagut</option>
                         <option value="Regional Sumbagteng">Regional Sumbagteng</option>
@@ -294,7 +303,7 @@ $result = $conn->query($sql);
                 <!-- Tombol Aksi -->
                 <button class="btn-filter-action btn-terapkan" onclick="terapkanFilter()"><i class="fas fa-filter"></i> Terapkan</button>
                 <button class="btn-filter-action btn-reset" onclick="resetFilter()"><i class="fas fa-sync-alt"></i> Reset</button>
-                <a href="export.php" class="btn-filter-action btn-export"><i class="fas fa-file-csv"></i> Export CSV</a>
+                <a href="export.php" class="btn-filter-action btn-export"><i class="fas fa-file-csv"></i> Export</a>
             </div>
 
             <table id="dataTable">
@@ -318,9 +327,11 @@ $result = $conn->query($sql);
                             $status = htmlspecialchars($row['status_karyawan']);
                             $usaha = htmlspecialchars($row['anak_usaha']);
                             $reg = htmlspecialchars($row['regional']);
+                            $agama = htmlspecialchars($row['kristen'] ?? '-');
                             $nama_email = htmlspecialchars($row['nama']) . ' ' . htmlspecialchars($row['email']);
                             
-                            echo "<tr class='data-row' data-status='{$status}' data-usaha='{$usaha}' data-regional='{$reg}' data-search='" . strtolower($nama_email) . "'>";
+                            // Tambahkan data-kristen untuk filter JS
+                            echo "<tr class='data-row' data-status='{$status}' data-usaha='{$usaha}' data-regional='{$reg}' data-kristen='{$agama}' data-search='" . strtolower($nama_email) . "'>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td><strong>" . htmlspecialchars($row['nama']) . "</strong><br><small style='color:#718096;'>" . htmlspecialchars($row['email']) . "</small></td>";
                             echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";
@@ -368,11 +379,12 @@ $result = $conn->query($sql);
                             echo "<div class='detail-item full-width'><span class='detail-label'>Masa Kontrak</span><span class='detail-value'>" . $kontrak . "</span></div>";
                             echo "</div>";
 
-                            // SEKSI 3: KELUARGA
+                            // SEKSI 3: KELUARGA (TAMBAHAN KRISTEN)
                             echo "<div class='detail-section-title'><i class='fas fa-heart'></i> Keluarga & Gereja</div>";
                             echo "<div class='detail-text-area' style='grid-template-columns: 1fr 1fr;'>";
                             echo "<div class='detail-item'><span class='detail-label'>Status Pernikahan</span><span class='detail-value'>" . htmlspecialchars($row['status_pernikahan']) . "</span></div>";
                             echo "<div class='detail-item'><span class='detail-label'>Jumlah Anak</span><span class='detail-value'>" . htmlspecialchars($row['jumlah_anak']) . "</span></div>";
+                            echo "<div class='detail-item'><span class='detail-label'>Denominasi Kristen</span><span class='detail-value'>" . $agama . "</span></div>";
                             echo "<div class='detail-item full-width'><span class='detail-label'>Gereja / Jemaat</span><span class='detail-value'>" . htmlspecialchars($row['gereja']) . "</span></div>";
                             echo "</div>";
 
@@ -409,10 +421,11 @@ $result = $conn->query($sql);
             }
         }
 
-        // 2. Fungsi Filter Terpadu
+        // 2. Fungsi Filter Terpadu (Termasuk Kristen)
         function terapkanFilter() {
             var searchText = document.getElementById('searchInput').value.toLowerCase();
             var filterStatus = document.getElementById('filterStatus').value;
+            var filterKristen = document.getElementById('filterKristen').value;
             var filterRegional = document.getElementById('filterRegional').value;
             
             var infoKategori = window.currentInfoKategori || 'all';
@@ -424,6 +437,7 @@ $result = $conn->query($sql);
                 var rowStatus = row.getAttribute('data-status');
                 var rowUsaha = row.getAttribute('data-usaha');
                 var rowRegional = row.getAttribute('data-regional');
+                var rowKristen = row.getAttribute('data-kristen');
                 var rowSearch = row.getAttribute('data-search');
                 
                 var match = true;
@@ -434,6 +448,7 @@ $result = $conn->query($sql);
 
                 if (searchText && !rowSearch.includes(searchText)) match = false;
                 if (filterStatus && rowStatus !== filterStatus) match = false;
+                if (filterKristen && rowKristen !== filterKristen) match = false;
                 if (filterRegional && rowRegional !== filterRegional) match = false;
 
                 if (match) {
@@ -452,12 +467,15 @@ $result = $conn->query($sql);
             if (kategori === 'status_karyawan') {
                 document.getElementById('filterStatus').value = nilai;
                 document.getElementById('filterRegional').value = '';
+                document.getElementById('filterKristen').value = '';
             } else if (kategori === 'regional') {
                 document.getElementById('filterRegional').value = nilai;
                 document.getElementById('filterStatus').value = '';
+                document.getElementById('filterKristen').value = '';
             } else {
                 document.getElementById('filterStatus').value = '';
                 document.getElementById('filterRegional').value = '';
+                document.getElementById('filterKristen').value = '';
             }
 
             document.getElementById('searchInput').value = '';
@@ -468,6 +486,7 @@ $result = $conn->query($sql);
         function resetFilter() {
             document.getElementById('searchInput').value = '';
             document.getElementById('filterStatus').value = '';
+            document.getElementById('filterKristen').value = '';
             document.getElementById('filterRegional').value = '';
             
             window.currentInfoKategori = 'all';
