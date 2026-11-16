@@ -135,9 +135,17 @@ $result = $conn->query($sql);
         th { background-color: #F8FAFC; color: #0A1F44; font-weight: 600; font-family: 'Poppins', sans-serif; }
         tr:hover { background-color: #F1F5F9; }
         
-        .btn-detail { background-color: #0A1F44; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; }
+        /* Tombol Aksi di Tabel */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-detail { background-color: #0A1F44; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; text-decoration: none; }
         .btn-detail:hover { background-color: #D32F2F; }
         .btn-detail.active { background-color: #D32F2F; }
+        
+        .btn-edit { background-color: #D4AF37; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; text-decoration: none; }
+        .btn-edit:hover { background-color: #B5952F; }
 
         .detail-row { display: none; background-color: #FFFFFF; }
         .detail-row td { padding: 0; border-bottom: 2px solid #0A1F44; }
@@ -182,6 +190,7 @@ $result = $conn->query($sql);
             .filter-toolbar { flex-direction: column; align-items: stretch; }
             .filter-group { width: 100%; }
             .btn-filter-action { width: 100%; }
+            .action-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -273,7 +282,6 @@ $result = $conn->query($sql);
                         <option value="Kontrak Project">Kontrak Project</option>
                     </select>
                 </div>
-                <!-- FILTER KRISTEN BARU -->
                 <div class="filter-group">
                     <i class="fas fa-cross"></i>
                     <select id="filterKristen">
@@ -330,7 +338,6 @@ $result = $conn->query($sql);
                             $agama = htmlspecialchars($row['kristen'] ?? '-');
                             $nama_email = htmlspecialchars($row['nama']) . ' ' . htmlspecialchars($row['email']);
                             
-                            // Tambahkan data-kristen untuk filter JS
                             echo "<tr class='data-row' data-status='{$status}' data-usaha='{$usaha}' data-regional='{$reg}' data-kristen='{$agama}' data-search='" . strtolower($nama_email) . "'>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td><strong>" . htmlspecialchars($row['nama']) . "</strong><br><small style='color:#718096;'>" . htmlspecialchars($row['email']) . "</small></td>";
@@ -338,7 +345,15 @@ $result = $conn->query($sql);
                             echo "<td>" . $status . "<br><small style='color:#718096;'>" . $usaha . "</small></td>";
                             echo "<td>" . $reg . "</td>";
                             echo "<td>" . htmlspecialchars($row['gereja']) . "</td>";
-                            echo "<td><button class='btn-detail' onclick='toggleDetail(".$id_row.", this)'><i class='fas fa-chevron-down'></i> Detail</button></td>";
+                            
+                            // KOLOM AKSI (Detail & Edit)
+                            echo "<td>";
+                            echo "<div class='action-buttons'>";
+                            echo "<button class='btn-detail' onclick='toggleDetail(".$id_row.", this)'><i class='fas fa-chevron-down'></i> Detail</button>";
+                            echo "<a href='edit_anggota.php?id=" . $id_row . "' class='btn-edit'><i class='fas fa-edit'></i> Edit</a>";
+                            echo "</div>";
+                            echo "</td>";
+                            
                             echo "</tr>";
 
                             echo "<tr id='detail-row-".$id_row."' class='detail-row'>";
@@ -379,7 +394,7 @@ $result = $conn->query($sql);
                             echo "<div class='detail-item full-width'><span class='detail-label'>Masa Kontrak</span><span class='detail-value'>" . $kontrak . "</span></div>";
                             echo "</div>";
 
-                            // SEKSI 3: KELUARGA (TAMBAHAN KRISTEN)
+                            // SEKSI 3: KELUARGA
                             echo "<div class='detail-section-title'><i class='fas fa-heart'></i> Keluarga & Gereja</div>";
                             echo "<div class='detail-text-area' style='grid-template-columns: 1fr 1fr;'>";
                             echo "<div class='detail-item'><span class='detail-label'>Status Pernikahan</span><span class='detail-value'>" . htmlspecialchars($row['status_pernikahan']) . "</span></div>";
@@ -421,7 +436,7 @@ $result = $conn->query($sql);
             }
         }
 
-        // 2. Fungsi Filter Terpadu (Termasuk Kristen)
+        // 2. Fungsi Filter Terpadu
         function terapkanFilter() {
             var searchText = document.getElementById('searchInput').value.toLowerCase();
             var filterStatus = document.getElementById('filterStatus').value;
